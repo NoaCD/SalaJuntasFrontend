@@ -13,10 +13,8 @@ document.addEventListener('DOMContentLoaded', function () {
             center: 'title',
             right: 'timeGridDay,dayGridMonth,timeGridWeek,listWeek'
         },
-
         //Idioma
         locale: 'es',
-
         //TimeZone o Hora de la zona
         timeZone: 'America/Merida',
 
@@ -112,12 +110,12 @@ document.addEventListener('DOMContentLoaded', function () {
         let nuevoEvento = recolectarDatos("POST");
         let resultadoValidacion = validarEvento(nuevoEvento);
 
-        if (resultadoValidacion === "incompleto") {
-            mostrarAlertToast('Por favor completa todos los campos');
-
-        } else {
+        if (resultadoValidacion) {
             GuardarEvento(nuevoEvento);
             CerrarModal();
+        } else {
+            mostrarAlertToast('Por favor completa todos los campos');
+           
         }
 
 

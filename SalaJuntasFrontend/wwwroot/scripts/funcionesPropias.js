@@ -24,19 +24,25 @@ function recolectarDatos(method) {
  * objeto : eventoOBjeto
  * */
 function validarEvento(objetoEvento) {
-    let title = objetoEvento.title;
-    let description = objetoEvento.description;
-    let color = objetoEvento.color;
-    let start = objetoEvento.start;
-    let end = objetoEvento.end;
-    let startTime = objetoEvento.startTime;
-    let endTime = objetoEvento.endTime;
+    //Nos Ahorramos la asignacion de variables locales con la desestructuracion de datos
+
+    //let title = objetoEvento.title;
+    //let description = objetoEvento.description;
+    //let color = objetoEvento.color;
+    //let start = objetoEvento.start;
+    //let end = objetoEvento.end;
+    //let startTime = objetoEvento.startTime;
+    //let endTime = objetoEvento.endTime;
+
+    //Validamos el objeto que llega por parametro por desestructuracion de datos
+    let { title, description, start, end, startTime, endTime } = objetoEvento;
+
 
     // start time and end time
-    if (title === "" || description === "" || color === "" || start === "" || end === "" || startTime === "" || endTime === "") {
-        return "incompleto";
+    if (title === "" || description === "" || start === "" || end === "" || startTime === "" || endTime === "") {
+        return false;
     } else {
-        return objetoEvento;
+        return true;
     }
 
 
@@ -103,6 +109,8 @@ function obtenerDuracionEvento(dateTimeInicio, dateTimeFinal = "") {
         var minutes = parseInt(duration.asMinutes()) % 60;
 
         if (hours > 1) {
+            stringDuration = (hours + ' horas y ' + minutes + ' minutos.');
+        } else if (hours == 0) {
             stringDuration = (hours + ' horas y ' + minutes + ' minutos.');
         } else {
             stringDuration = (hours + ' hora y ' + minutes + ' minutos.');
