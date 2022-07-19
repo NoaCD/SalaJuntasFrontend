@@ -4,6 +4,12 @@
 .fondo-azul {
     background-color: #7EA1C4;
 }
+.fondo-gris-primary {
+    background-color: #3D4445;
+}
 .color-text-primario {
-    color: #1B365C;
+    color: #F5F5F4;
+}
+.text-banner{
+    font-family:Calistha;
 }

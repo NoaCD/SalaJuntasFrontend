@@ -78,31 +78,20 @@ document.addEventListener('DOMContentLoaded', function () {
             MostrarDetalleEvento();
         },
         //Eventos que se mostraran en el calendario
-        events: [
+        events: function (start, end, callback) {
+            $.ajax({
+                method: "GET",
+                url: "https://localhost:44365/api/eventos"
+            }).then(response => {
+                console.log(response);
+            }).catch(function () {
+                aler("No responde el api");
+            });
 
-            {
-                title: "Junta Directivos",
-                description: "Resolver problemeas internos de la empresa cuando estamos en peligro",
-                department: "Alta Direccíon",
-                cratedAt: "2022-06-17 06:00",
-                start: "2022-06-17 12:30",
-                backgroundColor: '#000000',
-
-            },
-            {
-                title: "Certificaciones reunion",
-                description: "Reunion para capacitar a las personas nuevas, y enseñarles a usar los sitemas de seguridad que hay en la empresa",
-                department: "Cértificaciones",
-                cratedAt: "2022-06-17 6:00",
-                start: "2022-06-17 12:30",
-                end: "2022-06-17 13:30",
-                eventColor: '#93d2ff',
-                textColor: "#000000"
-            }
-
-        ],
+        }
 
     });
+
     calendar.render();
 
     ///Controla el boton de agregar evento BOTON AGREGAR DEL MODAL
@@ -115,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
             CerrarModal();
         } else {
             mostrarAlertToast('Por favor completa todos los campos');
-           
+
         }
 
 

@@ -108,14 +108,13 @@ function obtenerDuracionEvento(dateTimeInicio, dateTimeFinal = "") {
         // duration in minutes
         var minutes = parseInt(duration.asMinutes()) % 60;
 
-        if (hours > 1) {
+        if (hours == 1) {
             stringDuration = (hours + ' horas y ' + minutes + ' minutos.');
         } else if (hours == 0) {
             stringDuration = (hours + ' horas y ' + minutes + ' minutos.');
         } else {
             stringDuration = (hours + ' hora y ' + minutes + ' minutos.');
         }
-
     } else {
 
         stringDuration = "No hay hora final valida, por lo que no se puede calcular la duracion"
