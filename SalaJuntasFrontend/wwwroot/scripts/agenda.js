@@ -1,4 +1,5 @@
-﻿/*
+﻿
+/*
  * Las fecha internamente las maneja asi
  * "2022-06-17T09:00:00"
  */
@@ -66,29 +67,101 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param {any} info
          */
         eventClick: function (info) {
+            moment.locale("es");
+
+            let userNameShort = info.event.extendedProps.usuario.primerNombre + " " + info.event.extendedProps.usuario.apellidoPaterno;
+            let fechaCreacion = info.event.extendedProps.fechaCreacion;
+
             console.log(info.event);
             //Obtenmos la duracion del evento con la funcion local
             let stringDuration = obtenerDuracionEvento(info.event.start, info.event.end);
-
             $("#txtShowTitle").html(info.event.title);
+            $("#txtShowSubtitle").html(info.event.extendedProps.usuario.departamento.nombre);
             $("#txtShowDescription").html(info.event.extendedProps.description);
-            $("#txtShowSubtitle").html(info.event.extendedProps.department);
-            $("#txtShowDuration").html("Duracion: " + stringDuration);
-            $("#txtShowInLapses").html("<b>De</b> " + info.event.extendedProps.tStartTime + " <b>A</b> " + info.event.extendedProps.tEndTime);
+            $("#txtShowDuration").html();
+            if (info.event.extendedProps.fechaModificacion != null && info.event.extendedProps.fechaModificacion != "") {
+                $("#txtShowUpdatedAt").html(
+                    "Ultima actualizacion " + moment(info.event.extendedProps.fechaModificacion).fromNow()
+                );
+            } else {
+                $("#txtShowUpdatedAt").html(
+                    ""
+                );
+            }
+            $("#txtShowInLapses").html(
+                "Especificaciones <br/><b>De</b> " +
+                info.event.extendedProps.tStartTime + " <b>A</b> " +
+                info.event.extendedProps.tEndTime +
+                "<br><b>Duracion:</b> " + stringDuration + "<br>"
+                + `Creado el: ${moment(fechaCreacion).format("D")} de ${moment(fechaCreacion).format("MMMM yy")} • <b>${userNameShort}</b>`
+
+            );
+
             MostrarDetalleEvento();
         },
         //Eventos que se mostraran en el calendario
-        events: function (start, end, callback) {
-            $.ajax({
-                method: "GET",
-                url: "https://localhost:44365/api/eventos"
-            }).then(response => {
-                console.log(response);
-            }).catch(function () {
-                aler("No responde el api");
-            });
+        //events: [
+        //    {
+        //        title: "Junta Jefes",
+        //        start: "2022-07-19 07:00:00",
+        //        end: "2022-07-19 11:00:00",
+        //        tStartTime: "07:00:00",
+        //        tEndTime: "11:00:00",
+        //        departament: "RH",
+        //        description: "JUNTA PARA HABLAR CON LOS COMPAÑEROS",
 
-        }
+
+
+        //    }
+        //]
+
+        //events: function (start, end, callback) {
+        //    let fInicio = moment(start.start).format('YYYY-MM-DD HH:mm:ss');
+        //    let fFin = moment(start.end).format('YYYY-MM-DD HH:mm:ss');
+        //    $.ajax({
+        //        method: "GET",
+        //        dataType: "JSON",
+        //        url: "/obtener-eventos/" + fInicio + "/" + fFin,
+        //        success: function (response) {
+        //            console.log(response);
+        //            response.map(r => {
+        //                //Obtenemos el array de objetos tenemos que gardarlos uno a uno
+        //                GuardarEvento(r);
+
+        //            })
+
+
+        //            console.log(calendar.getEvents());
+
+        //        },
+        //        error: function (err) {
+        //            alert("erro Conectar API - " + err)
+        //        }
+
+
+        //    });
+
+        //}
+        //events: [{
+        //    url: "/obtener-eventos/",
+        //    error: function (objError) {
+        //        alert("Error");
+        //    }
+        //}],
+        eventSources: [
+
+            // your event source
+            {
+                url: '/obtener-eventos/',
+                method: 'GET',
+                failure: function () {
+                    mostrarAlertSwal("No hay conexion con el API", "Contacte con el desarrollador para solucionar este problema, gracias", "", "error");
+                }
+            }
+
+
+        ]
+
 
     });
 
@@ -113,14 +186,25 @@ document.addEventListener('DOMContentLoaded', function () {
     function GuardarEvento(objEvento) {
         calendar.addEvent({
             title: objEvento.title,
-            start: objEvento.start + " " + objEvento.startTime,
-            end: objEvento.end + " " + objEvento.endTime,
+            start: objEvento.start,
+            end: objEvento.end,
             backgroundColor: objEvento.color,
             description: objEvento.description,
-            tStartTime: objEvento.startTime,
-            tEndTime: objEvento.endTime
+            tStartTime: moment(objEvento.end).format("HH:mm:ss"),
+            tEndTime: moment(objEvento.start).format("HH:mm:ss"),
+
 
         });
+        //calendar.addEvent({
+        //    title: objEvento.title,
+        //    start: objEvento.start + " " + objEvento.startTime,
+        //    end: objEvento.end + " " + objEvento.endTime,
+        //    backgroundColor: objEvento.color,
+        //    description: objEvento.description,
+        //    tStartTime: objEvento.startTime,
+        //    tEndTime: objEvento.endTime
+
+        //});
         console.log(calendar.getEvents());
 
     }
