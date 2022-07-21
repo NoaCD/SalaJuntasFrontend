@@ -10,6 +10,15 @@
 .color-text-primario {
     color: #F5F5F4;
 }
-.text-banner{
-    font-family:Calistha;
+.text-banner {
+    font-family: Calistha;
+}
+
+@font-face {
+    font-family: 'Calistha';
+    src: url('../fonts/Calistha.ttf') format("truetype");
+}
+@font-face {
+    font-family: 'Future Friends';
+    src: url('../fonts/Future_Friends.ttf') format("truetype");
 }

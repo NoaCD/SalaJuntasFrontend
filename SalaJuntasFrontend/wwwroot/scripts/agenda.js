@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
         locale: 'es',
         //TimeZone o Hora de la zona
         timeZone: 'America/Merida',
-
         //Formato 12 hrs para mostar en la tabla 
         slotLabelFormat: {
             hour: '2-digit',
@@ -76,6 +75,9 @@ document.addEventListener('DOMContentLoaded', function () {
             //Obtenmos la duracion del evento con la funcion local
             let stringDuration = obtenerDuracionEvento(info.event.start, info.event.end);
             $("#txtShowTitle").html(info.event.title);
+            $("#txtShowDateProgramated").html(
+                `Para el ${moment(info.event.start).format("ll")}`
+            );
             $("#txtShowSubtitle").html(info.event.extendedProps.usuario.departamento.nombre);
             $("#txtShowDescription").html(info.event.extendedProps.description);
             $("#txtShowDuration").html();
@@ -89,9 +91,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
             }
             $("#txtShowInLapses").html(
-                "Especificaciones <br/><b>De</b> " +
-                info.event.extendedProps.tStartTime + " <b>A</b> " +
-                info.event.extendedProps.tEndTime +
+                "<b>Especificaciones</b><br/><b>De</b> " +
+                moment(info.event.extendedProps.tStartTime, "HH:mm").format("HH:mm") + " <b>A</b> " +
+                moment(info.event.extendedProps.tEndTime, "HH:mm").format("HH:mm") +
                 "<br><b>Duracion:</b> " + stringDuration + "<br>"
                 + `Creado el: ${moment(fechaCreacion).format("D")} de ${moment(fechaCreacion).format("MMMM yy")} • <b>${userNameShort}</b>`
 
@@ -149,19 +151,19 @@ document.addEventListener('DOMContentLoaded', function () {
         //    }
         //}],
         eventSources: [
-
             // your event source
             {
                 url: '/obtener-eventos/',
                 method: 'GET',
+                extraParams: {
+                    idAreaMostrar: 1,
+                },
                 failure: function () {
                     mostrarAlertSwal("No hay conexion con el API", "Contacte con el desarrollador para solucionar este problema, gracias", "", "error");
+                    console.log(url);
                 }
             }
-
-
         ]
-
 
     });
 
@@ -177,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function () {
             CerrarModal();
         } else {
             mostrarAlertToast('Por favor completa todos los campos');
-
         }
 
 
