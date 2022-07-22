@@ -25,7 +25,13 @@ namespace SalaJuntasFrontend.Controllers
         {
             return View();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="idAreaMostrar"></param>
+        /// <returns></returns>
         [HttpGet("obtener-eventos")]
         public async Task<ActionResult<List<EventoViewDTO>>> GetAll([FromQuery] DateTime start, DateTime end, int? idAreaMostrar = 1)
         {
@@ -62,7 +68,11 @@ namespace SalaJuntasFrontend.Controllers
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: EventosController/Details/5
         public ActionResult Details(int id)
         {
@@ -95,7 +105,12 @@ namespace SalaJuntasFrontend.Controllers
         {
             return View();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         // POST: EventosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -110,13 +125,22 @@ namespace SalaJuntasFrontend.Controllers
                 return View();
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: EventosController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         // POST: EventosController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
