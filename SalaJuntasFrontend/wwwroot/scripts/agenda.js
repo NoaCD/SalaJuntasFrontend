@@ -43,22 +43,29 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param {any} info tiene toda la data de la fecha a elegir
          */
         dateClick: function (info) {
-            if (info.allDay == true) {
-                $("#txtStart").val(info.dateStr);
-                MostraModal();
-            } else {
-                //alert(moment(calEvent.start).format('h:mm:ss a'));
-                //Tenemos los datos de la fecha seleccionada lo formateamos para nuestro uso
-                let fechaInicioNuevoEvento = (moment(info.dateStr).format("YYYY-MM-D"));
-                let horaInicioNuevoEvento = (moment(info.dateStr).format("HH:mm"));
-                //Los eventos programados terminaran en el mismo dia solo la hora cambiara
-                let fechaFinalNuevoEvento = (moment(info.dateStr).format("YYYY-MM-D"));
-                //Desahibilitamos los inputs para que no lo mueva el usuario
-                $("#txtStart").val(fechaInicioNuevoEvento).prop('disable', true);
-                $("#tHoraInicio").val(horaInicioNuevoEvento).prop('disabled', true);
-                MostraModal();
+            //Vamos a validar si existe el id del usuario para poder procesarlo
+            let userId = 1;
+            if (userId != -1) {
+                if (info.allDay == true) {
+                    $("#txtStart").val(info.dateStr);
+                    MostraModal();
+                } else {
+                    //alert(moment(calEvent.start).format('h:mm:ss a'));
+                    //Tenemos los datos de la fecha seleccionada lo formateamos para nuestro uso
+                    let fechaInicioNuevoEvento = (moment(info.dateStr).format("YYYY-MM-D"));
+                    let horaInicioNuevoEvento = (moment(info.dateStr).format("HH:mm"));
+                    //Los eventos programados terminaran en el mismo dia solo la hora cambiara
+                    let fechaFinalNuevoEvento = (moment(info.dateStr).format("YYYY-MM-D"));
+                    //Desahibilitamos los inputs para que no lo mueva el usuario
+                    $("#txtStart").val(fechaInicioNuevoEvento).prop('disable', true);
+                    $("#tHoraInicio").val(horaInicioNuevoEvento).prop('disabled', true);
+                    MostraModal();
 
+                }
+            } else {
+                mostrarAlertSwal('<i>¡Espera!</i>', '¡Porfavor inicia sesion para realizar tu evento!');
             }
+
         },
         /**
          * Event click, es una funcion nativa del framework de javascript
