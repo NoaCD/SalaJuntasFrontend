@@ -1,8 +1,35 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">¡Bienvenido!</h1>
+    <h5>Te presentamos <a href="@Url.Action("Index","Agenda")" >Tzolk'in</a> por <b>Giotex</b> </h5>
+    <p>
+        "Tzol'kin" por <b>Giotex</b>, es una <i>Aplicacion Web</i> que te servira para hacer <u>reservaciones</u> en las diferentes salas de la empresa. Esto
+        ayudara a todos los colaboradores a observar qué actividades estaran ocupando las diferentes salas y evitar esos molestos choques de horario.
+    </p>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 class="display-6">¿Como me registro o inicio sesion?</h1>
+                <div class="ratio ratio-16x9">
+                    <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" title="YouTube video" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="col">
+                <h1 class="display-6">¿Como puedo realizar un evento?</h1>
+                <div class="ratio ratio-16x9">
+                    <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=1" title="YouTube video" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="col">
+                <h1 class="display-6">¿Como puedo eliminar un evento?</h1>
+                <div class="ratio ratio-16x9">
+                    <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=3" title="YouTube video" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

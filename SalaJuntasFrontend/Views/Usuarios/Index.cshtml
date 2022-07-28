@@ -1,0 +1,26 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Usuarios";
+}
+@section Styles{
+    <link rel="stylesheet" href="~/lib/datatable/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" />
+
+}
+<div><br /></div>
+<div class="container">
+    <div class="container-fluid">
+        <h1 class="text-center display-6">Todos los usuarios</h1>
+        <hr />
+        <partial name="_TablaUsuarios.cshtml" />
+    </div>
+</div>
+
+@section Scripts{
+<script type="text/javascript" src="~/lib/datatable/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="~/scripts/crud/usuarios.js"></script>
+<script type="text/javascript" src="~/lib/fontawesome/js/all.min.js"></script>
+}

@@ -74,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         eventClick: function (info) {
             moment.locale("es");
-
             let userNameShort = info.event.extendedProps.usuario.primerNombre + " " + info.event.extendedProps.usuario.apellidoPaterno;
             let fechaCreacion = info.event.extendedProps.fechaCreacion;
 
