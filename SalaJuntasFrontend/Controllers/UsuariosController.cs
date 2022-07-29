@@ -13,10 +13,12 @@ namespace SalaJuntasFrontend.Controllers
         public HttpsLocalService localServiceSSL = new HttpsLocalService();
 
         private readonly IMapper mapper;
+        private readonly IConfiguration _configuration;
 
-        public UsuariosController(IMapper mapper)
+        public UsuariosController(IMapper mapper, IConfiguration configuration)
         {
             this.mapper = mapper;
+            _configuration = configuration;
         }
 
 
@@ -36,7 +38,7 @@ namespace SalaJuntasFrontend.Controllers
         public async Task<ActionResult<List<UsuarioDTO>>> TodosUsuarios()
         {
             HttpClient client = localServiceSSL.VotarSSL();
-            var url = "https://localhost:44365" + "/api/usuarios";
+            var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/usuarios";
 
             try
             {

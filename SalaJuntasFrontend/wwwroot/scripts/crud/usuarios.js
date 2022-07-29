@@ -1,4 +1,5 @@
-﻿/* Formatting function for row details - modify as you need */
+﻿
+/* Formatting function for row details - modify as you need */
 function format(d) {
     let apellidoMaterno = d.apellidoMaterno != null ? d.apellidoMaterno : "";
     let segundoNombre = d.segundoNombre != null ? d.segundoNombre : "";
@@ -8,6 +9,10 @@ function format(d) {
     let cargo = d.cargo.nombre;
     let fechaCreacion = moment(d.fechaCreacion).format('LLLL');
     let tipoUsuario = d.tipoUsuario.nombre;
+    let edadEnAnios = moment().diff(d.fechaNacimiento, 'years');
+    let edadEnDias = moment().diff(d.fechaNacimiento, 'days');
+    let añosEnMarte = (edadEnDias / 687); //687 dias año astral en marte
+    let edad = edadEnAnios + " años";
     // `d` is the original data object for the row
     return (
         '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
@@ -20,7 +25,7 @@ function format(d) {
         '<tr>' +
         '<td>Fecha Nacimiento:</td>' +
         '<td>' +
-        `<span class="badge bg-primary">${fechaNacimiento}</span>` +
+        `<span class="badge bg-primary">${fechaNacimiento}</span> <span class="badge bg-success"> Edad - ${edad}</span> <span class="badge bg-dark"> Edad en Marte - ${Math.trunc(añosEnMarte)} años :)</span>` +
         '</td>' +
         '</tr>' +
         '<tr>' +
@@ -54,7 +59,18 @@ function format(d) {
 
 $(document).ready(function () {
     var table = $('#example').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'pdf', 'excel',
+            {
+                title: 'ADD',
+                text: '<i class="fa-solid fa-user-plus"></i>',
+                action: () => window.location.href = "/usuarios/Create",
+            },
+
+        ],
         ajax: '/Usuarios/TodosUsuarios',
+        responsive: true,
         columns: [
             {
                 className: 'dt-control',
@@ -94,14 +110,14 @@ $(document).ready(function () {
                     return moment(data.fechaCreacion).fromNow();
                 }
             },
-           
+
             {
                 data: function (data) {
                     let btnUnlock = `<button class="btn btn-dark" id="${data.id}" ><i class="fa-solid fa-lock"></i></button>`;
                     if (data.estatus.clave == 'proceso')
                         btnUnlock = `<button class="btn btn-primary" id="${data.id}" ><i class="fa-solid fa-check"></i></button>`;
                     if (data.estatus.clave == 'inactivo')
-                        btnUnlock = `<button class="btn btn-primary" id="${data.id}" ><i class="fa-solid fa-unlock"></i></button>`;
+                        btnUnlock = `<button class="btn btn-success" id="${data.id}" ><i class="fa-solid fa-unlock"></i></button>`;
 
                     return `<button class="btn btn-warning" id="${data.id}" ><i class="fa-solid fa-pencil"></i></button> ${btnUnlock} <button class="btn btn-danger" id="${data.id}" ><i class="fa-solid fa-trash"></i></button>`
                 }
@@ -128,4 +144,5 @@ $(document).ready(function () {
             tr.addClass('shown');
         }
     });
+
 });

@@ -14,10 +14,12 @@ namespace SalaJuntasFrontend.Controllers
         public HttpsLocalService localServiceSSL = new HttpsLocalService();
 
         private readonly IMapper mapper;
+        private readonly IConfiguration _configuration;
 
-        public EventosController(IMapper mapper)
+        public EventosController(IMapper mapper,IConfiguration configuration)
         {
             this.mapper = mapper;
+            _configuration = configuration;
         }
 
         // GET: EventosController
@@ -37,7 +39,7 @@ namespace SalaJuntasFrontend.Controllers
         {
             HttpClient client = localServiceSSL.VotarSSL();
 
-            string domain = "https://localhost:44365";
+            string domain = _configuration.GetValue<string>("ConnectionStrings:API");
             // Call asynchronous network methods in a try/catch block to handle exceptions.
             string url = $"{domain}/api/eventos?start={start.ToString("yyyy/MM/dd HH:mm:ss")}&end={end.ToString("yyyy/MM/dd HH:mm:ss")}&idAreaMostrar={idAreaMostrar}";
 

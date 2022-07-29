@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         dateClick: function (info) {
             //Vamos a validar si existe el id del usuario para poder procesarlo
-            let userId = 1;
+            let userId = -1;
             if (userId != -1) {
                 if (info.allDay == true) {
                     $("#txtStart").val(info.dateStr);
