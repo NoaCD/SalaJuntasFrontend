@@ -1,0 +1,111 @@
+﻿@using ApiSalaJuntas.Model.DTOS.Usuarios
+
+@model UsuarioCRUDViewModel;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "/Views/Shared/_Modal.cshtml";
+}
+@section Styles{
+<link rel="stylesheet" href="~/lib/css/MensjaFormularios.css" />
+}
+@section title{
+    Creando un Usuario
+}
+@section body{
+<form id="formCrearUsuario">
+    <div class="mb-3">
+        <label for="primerNombre" class="form-label">Primer Nombre</label>
+        <input  type="text" class="form-control" id="primerNombre" name="primerNombre" aria-describedby="primerNombre">
+        <div id="msgPrimerNombre" class="form-text"> Escribe tu primer nombre </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="segundoNombre" class="form-label">Segundo Nombre</label>
+        <input type="text" class="form-control" id="segundoNombre" name="segundoNombre" aria-describedby="segundoNombre">
+        <div id="msgPrimerNombre" class="form-text">Escribe tu segundo nombre</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="apellidoPaterno" class="form-label">Apellido Paterno</label>
+        <input type="text" class="form-control" id="apellidoPaterno" name="apellidoPaterno" aria-describedby="apellidoPaterno">
+        <div id="msgApellidoPaterno" class="form-text">(*)Escribe tu apellido paterno</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="apellidoMaterno" class="form-label">Apellido Materno</label>
+        <input type="text" class="form-control" id="apellidoMaterno" name="apellidoMaterno" aria-describedby="apellidoMaterno">
+        <div id="msgApellidoMaterno" class="form-text">Escribe tu apellido Materno </div>
+    </div>
+    <div class="mb-3">
+        <label for="fechaNacimiento" class="form-label">Fecha Nacimiento</label>
+        <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento">
+        <div id="msgFechaNacimiento" class="form-text">Ecuentra tu fecha de nacimiento </div>
+
+    </div>
+    <div class="mb-3">
+        <label for="departamento" class="form-label">Departamento</label>
+
+        <select class="form-select" aria-label="departamento" id="departamento" name="departamento" >
+
+            <option value="" selected>Selecciona un departamento</option>
+            @if(Model.icono != "error"){
+            @foreach( var departamento in Model.departamentos )
+            {
+            <option value="@departamento.id"> @departamento.nombre </option>
+
+            }
+            }else{
+            <option> @Model.icono | @Model.mensaje </option>
+            }
+        </select>
+        <div id="msgCargo" class="form-text">Selecciona al departamento que perteneces </div>
+
+    </div>
+    <div class="mb-3">
+        <label for="cargo" class="form-label">Cargo</label>
+        <select class="form-select" aria-label="cargo" name="cargo" id="cargo">
+            <option value="" selected>Selecciona un cargo</option>
+            @if(Model.icono != "error"){
+            @foreach( var cargo in Model.cargos )
+            {
+            <option value="@cargo.id"> @cargo.nombre </option>
+
+            }
+            }else{
+            <option> @Model.icono | @Model.mensaje </option>
+            }
+
+        </select>
+        <div id="msgDepartamento" class="form-text">Este campo sera visible para todos</div>
+
+    </div>
+
+    <div class="mb-3">
+        <label for="correoElectronico" class="form-label">Correo Electronico</label>
+        <input type="email" class="form-control" name="email" id="email"/>
+        <div id="msgCorreoElectronico" class="form-text">Escribe el tu correo electronico institucional </div>
+    </div>
+
+
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" name="password" id="password">
+        <div id="msgPassword" class="form-text">Recuerda esta contraseña </div>
+
+    </div>
+
+</form>
+
+}
+@section buttons{
+<button type="button" class="btn btn-primary" id="guardarUsuario">Guardar</button>
+
+}
+
+@section Scripts{
+<script type="text/javascript" src="~/scripts/crud/guardarUsuario.js"></script>
+<script type="text/javascript" src="~/scripts/alerts.js"></script>
+
+}

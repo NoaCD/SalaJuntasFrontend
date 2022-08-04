@@ -59,18 +59,50 @@ function format(d) {
 
 $(document).ready(function () {
     var table = $('#example').DataTable({
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        },
+        responsive: {
+            details: false
+        },
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
         dom: 'Bfrtip',
         buttons: [
             'pdf', 'excel',
             {
-                title: 'ADD',
                 text: '<i class="fa-solid fa-user-plus"></i>',
-                action: () => window.location.href = "/usuarios/Create",
+                action: () => $.get('/usuarios/create').done(function (response) {
+                    console.log(response);
+                    $('#modal').html(response);
+                    $('#modal').modal('show');
+                }).fail((error) => alert(`Tiempo agotado el servidor no responde: ${error}`))
             },
+            {
+
+                text: '<i class="fa-solid fa-arrows-rotate"></i>',
+                action: () => actualizarTablaAsyc()
+            }
 
         ],
         ajax: '/Usuarios/TodosUsuarios',
-        responsive: true,
+
         columns: [
             {
                 className: 'dt-control',
@@ -113,20 +145,17 @@ $(document).ready(function () {
 
             {
                 data: function (data) {
-                    let btnUnlock = `<button class="btn btn-dark" id="${data.id}" ><i class="fa-solid fa-lock"></i></button>`;
+                    let btnUnlock = `<a class="btn btn-dark" href="/usuario/block/${data.id}" id="${data.id}" ><i class="fa-solid fa-lock"></i></a>`;
                     if (data.estatus.clave == 'proceso')
                         btnUnlock = `<button class="btn btn-primary" id="${data.id}" ><i class="fa-solid fa-check"></i></button>`;
                     if (data.estatus.clave == 'inactivo')
                         btnUnlock = `<button class="btn btn-success" id="${data.id}" ><i class="fa-solid fa-unlock"></i></button>`;
-
-                    return `<button class="btn btn-warning" id="${data.id}" ><i class="fa-solid fa-pencil"></i></button> ${btnUnlock} <button class="btn btn-danger" id="${data.id}" ><i class="fa-solid fa-trash"></i></button>`
+                    return `<a class="btn btn-warning" onclick="update(${data.id})" ><i class="fa-solid fa-pencil"></i></a> ${btnUnlock} <a class="btn btn-danger" id="${data.id}" ><i class="fa-solid fa-trash"></i></a>`
                 }
             },
 
         ],
 
-
-        order: [[1, 'asc']],
     });
 
     // Add event listener for opening and closing details
@@ -144,5 +173,11 @@ $(document).ready(function () {
             tr.addClass('shown');
         }
     });
+
+
+    function actualizarTablaAsyc() {
+        table.ajax.reload()
+    }
+
 
 });

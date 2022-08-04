@@ -1,8 +1,12 @@
-﻿using ApiSalaJuntas.Model.DTOS.Usuarios;
+﻿using ApiSalaJuntas.Model.DTOS;
+using ApiSalaJuntas.Model.DTOS.Cargos;
+using ApiSalaJuntas.Model.DTOS.Departamentos;
+using ApiSalaJuntas.Model.DTOS.Usuarios;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SalaJuntasFrontend.Models;
 using SalaJuntasFrontend.Servicios;
 
 namespace SalaJuntasFrontend.Controllers
@@ -72,8 +76,19 @@ namespace SalaJuntasFrontend.Controllers
         // GET: UsuariosController/Create
         public ActionResult Create()
         {
-            return View();
+            var UsuarioCrudViewnModel = GetDataCrudUser().Result;
+
+            return View(UsuarioCrudViewnModel.Value);
         }
+
+        public UsuarioRespuestaDTO CrearUsuarioApi(UsuarioDTO usuarioDTO)
+        {
+
+            var nombre = usuarioDTO.primerNombre;
+
+            return new UsuarioRespuestaDTO();
+        }
+
 
         // POST: UsuariosController/Create
         [HttpPost]
@@ -91,9 +106,141 @@ namespace SalaJuntasFrontend.Controllers
         }
 
         // GET: UsuariosController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
+            string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
+            //Hacemos una peticion para obtener todos los datos del usuario
+            HttpClient client = localServiceSSL.VotarSSL();
+            //URL Usuario GET BY ID
+            var url = baseAPI + "/api/usuarios/" + id;
+            //URL GET Departamentos
+            var url2 = baseAPI + "/api/departamento/obtener-todos";
+            //URL TiposUsuarios
+            var url3 = baseAPI + "/api/TipoUsuarios";
+            var url4 = baseAPI + "/api/Cargos";
+
+            try
+            {
+                var userString = await client.GetAsync(url);
+                var listDepartmento = await client.GetAsync(url2);
+                var listaTipoUsuario = await client.GetAsync(url3);
+                var listaCargos = await client.GetAsync(url4);
+
+                var r = userString.StatusCode;
+                if (r == System.Net.HttpStatusCode.OK)
+                {
+                    //Usuarios response
+                    string UserResponseBody = await userString.Content.ReadAsStringAsync();
+                    var userDTO = JsonConvert.DeserializeObject<UsuarioDTO>(UserResponseBody);
+                    //Lista de departamentos
+                    string ListaDepartamentoResponseBody = await listDepartmento.Content.ReadAsStringAsync();
+                    var listDepartamentoDTO = JsonConvert.DeserializeObject<List<DepartamentoDTO>>(ListaDepartamentoResponseBody);
+                    //Lista de tiposUsuarios
+                    string ListaTipoUsuarioResponseBody = await listaTipoUsuario.Content.ReadAsStringAsync();
+                    var listaTiposUsuarioDTO = JsonConvert.DeserializeObject<List<TipoUsuarioDTO>>(ListaTipoUsuarioResponseBody);
+                    //Lista cargos
+                    string ListaCargosResponseBody = await listaCargos.Content.ReadAsStringAsync();
+                    var listCargosDTO = JsonConvert.DeserializeObject<List<CargoDTO>>(ListaCargosResponseBody);
+
+
+                    var editarUsuarioModel = new UsuarioCRUDViewModel
+                    {
+                        tiposUsuario = listaTiposUsuarioDTO,
+                        cargos = listCargosDTO,
+                        departamentos = listDepartamentoDTO,
+                        usuario = userDTO,
+                        icono = "success",
+                        mensaje = "Recuperado correctamente"
+                    };
+                    return View(editarUsuarioModel);
+
+                    // Above three lines can be replaced with new helper method below
+                    // string responseBody = await client.GetStringAsync(uri);
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
             return View();
+        }
+
+        private async Task<ActionResult<UsuarioCRUDViewModel>> GetDataCrudUser()
+        {
+
+            string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
+            //Hacemos una peticion para obtener todos los datos del usuario
+            HttpClient client = localServiceSSL.VotarSSL();
+
+            //URL GET Departamentos
+            var url2 = baseAPI + "/api/departamento/obtener-todos";
+            //URL TiposUsuarios
+            var url3 = baseAPI + "/api/TipoUsuarios";
+            //URL Cargos
+            var url4 = baseAPI + "/api/Cargos";
+
+            try
+            {
+
+                var listDepartamento = await client.GetAsync(url2);
+                var listaTipoUsuario = await client.GetAsync(url3);
+                var listaCargos = await client.GetAsync(url4);
+
+                var requestDepartament = listDepartamento.StatusCode;
+                var requestTipoUsuario = listaTipoUsuario.StatusCode;
+                var requestCargos = listaCargos.StatusCode;
+
+                if (requestDepartament == System.Net.HttpStatusCode.OK && requestTipoUsuario == System.Net.HttpStatusCode.OK && requestCargos == System.Net.HttpStatusCode.OK)
+                {
+                    //Lista de departamentos
+                    string ListaDepartamentoResponseBody = await listDepartamento.Content.ReadAsStringAsync();
+                    var listDepartamentoDTO = JsonConvert.DeserializeObject<List<DepartamentoDTO>>(ListaDepartamentoResponseBody);
+                    //Lista de tiposUsuarios
+                    string ListaTipoUsuarioResponseBody = await listaTipoUsuario.Content.ReadAsStringAsync();
+                    var listaTiposUsuarioDTO = JsonConvert.DeserializeObject<List<TipoUsuarioDTO>>(ListaTipoUsuarioResponseBody);
+                    //Lista cargos
+                    string ListaCargosResponseBody = await listaCargos.Content.ReadAsStringAsync();
+                    var listCargosDTO = JsonConvert.DeserializeObject<List<CargoDTO>>(ListaCargosResponseBody);
+
+
+                    var usuarioCRUDViewModel = new UsuarioCRUDViewModel
+                    {
+                        tiposUsuario = listaTiposUsuarioDTO,
+                        cargos = listCargosDTO,
+                        departamentos = listDepartamentoDTO,
+                        usuario = null,
+                        icono = "success",
+                        mensaje = "Satisfactorio"
+                    };
+                    return usuarioCRUDViewModel;
+
+                    // Above three lines can be replaced with new helper method below
+                    // string responseBody = await client.GetStringAsync(uri);
+
+                }
+                else
+                {
+                   return new UsuarioCRUDViewModel
+                    {
+                        icono = "error",
+                        mensaje = "Fallo un enpoint para solicitar la data"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return  new UsuarioCRUDViewModel
+                {
+                    icono = "error",
+                    mensaje = "Error al intentar elaborar la peticion con el API"
+                };
+            }
+
+     
+
         }
 
         // POST: UsuariosController/Edit/5
