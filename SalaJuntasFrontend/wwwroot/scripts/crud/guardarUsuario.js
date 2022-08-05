@@ -4,7 +4,12 @@ $(document).ready(function () {
     init();
 });
 
-
+/**
+ * 
+ * Funcion donde inicia el programa, 
+ * 
+ * 
+ * */
 function init() {
 
     $("#guardarUsuario").click(function () {
@@ -17,7 +22,9 @@ function init() {
     })
 }
 
-
+/**
+ * Se aplica JqueryValidate
+ * */
 function validarFormulario() {
     $("#formCrearUsuario").validate({
         rules: {
