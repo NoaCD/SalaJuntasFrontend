@@ -35,7 +35,6 @@ namespace ApiSalaJuntas.Model.DTOS.Usuarios
         public string? apellidoMaterno { get; set; } = "";
 
         [Required]
-
         public DateTime fechaNacimiento { get; set; }
 
     }

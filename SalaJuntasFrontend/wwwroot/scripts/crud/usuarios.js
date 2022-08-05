@@ -97,7 +97,7 @@ $(document).ready(function () {
             {
 
                 text: '<i class="fa-solid fa-arrows-rotate"></i>',
-                action: () => actualizarTablaAsyc()
+                action: () => actualizarTablaAsyc(table)
             }
 
         ],
@@ -175,9 +175,10 @@ $(document).ready(function () {
     });
 
 
-    function actualizarTablaAsyc() {
-        table.ajax.reload()
-    }
 
 
 });
+
+function actualizarTablaAsyc(table) {
+    table.ajax.reload()
+}

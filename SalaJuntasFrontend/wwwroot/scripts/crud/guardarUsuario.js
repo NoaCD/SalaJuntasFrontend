@@ -7,16 +7,18 @@ $(document).ready(function () {
 /**
  * 
  * Funcion donde inicia el programa, 
+ * El boton de guardar tiene un eventi click que al ejecutarse se active{
  * 
  * 
  * */
 function init() {
-
     $("#guardarUsuario").click(function () {
         if ($("#formCrearUsuario").valid() == true) {
-            console.log(JSON.stringify(armarObjeto()));
+            let jsonUsuario = JSON.stringify(armarObjetoUsuario());
+            enviarControlador("POST", "/Usuarios/CrearUsuarioApi", jsonUsuario);
+
         } else {
-            mostrarAlertToast("NO", "info");
+            mostrarAlertToast("Llena todos los campos obligatorios!", "info");
 
         }
     })
@@ -96,34 +98,5 @@ function validarFormulario() {
         }
     });
 
-}
-
-/***
- * Funcion que encapsula el formulario de crear Usuario en un objeto
- * retorna un objeto usuario para ser creado
- * */
-function armarObjeto() {
-    let primerNombre = $("#primerNombre").val();
-    let segundoNombre = $("#segundoNombre").val();
-    let apellidoPaterno = $("#apellidoPaterno").val();
-    let apellidoMaterno = $("#apellidoMaterno").val();
-    let fechaNacimiento = $("#fechaNacimiento").val();
-    let email = $("#email").val();
-    let password = $("#password").val();
-    let idDepartamento = $("#departamento").val();
-    let idCargo = $("#cargo").val();
-
-    let nuevoUsuario = {
-        "idDepartamento": idDepartamento,
-        "idCargo": idCargo,
-        "email": email,
-        "password": password,
-        "primerNombre": primerNombre,
-        "segundoNombre": segundoNombre,
-        "apellidoPaterno": apellidoPaterno,
-        "apellidoMaterno": apellidoMaterno,
-        "fechaNacimiento": fechaNacimiento
-    }
-    return nuevoUsuario;
 }
 

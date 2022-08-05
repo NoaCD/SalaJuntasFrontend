@@ -81,12 +81,13 @@ namespace SalaJuntasFrontend.Controllers
             return View(UsuarioCrudViewnModel.Value);
         }
 
-        public UsuarioRespuestaDTO CrearUsuarioApi(UsuarioDTO usuarioDTO)
+        [HttpPost]
+        public UsuarioRespuestaDTO CrearUsuarioApi([FromBody] UsuarioCreacionDTO usuarioCreacion)
         {
-
-            var nombre = usuarioDTO.primerNombre;
-
+            //Enviar al api la informacion
+            var nombre = usuarioCreacion.primerNombre;
             return new UsuarioRespuestaDTO();
+
         }
 
 
@@ -222,7 +223,7 @@ namespace SalaJuntasFrontend.Controllers
                 }
                 else
                 {
-                   return new UsuarioCRUDViewModel
+                    return new UsuarioCRUDViewModel
                     {
                         icono = "error",
                         mensaje = "Fallo un enpoint para solicitar la data"
@@ -232,14 +233,14 @@ namespace SalaJuntasFrontend.Controllers
             catch (Exception ex)
             {
 
-                return  new UsuarioCRUDViewModel
+                return new UsuarioCRUDViewModel
                 {
                     icono = "error",
                     mensaje = "Error al intentar elaborar la peticion con el API"
                 };
             }
 
-     
+
 
         }
 
