@@ -1,6 +1,7 @@
 ﻿using ApiSalaJuntas.Model.DTOS;
 using ApiSalaJuntas.Model.DTOS.Cargos;
 using ApiSalaJuntas.Model.DTOS.Departamentos;
+using ApiSalaJuntas.Model.DTOS.Estatus;
 using ApiSalaJuntas.Model.DTOS.Usuarios;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -80,31 +81,51 @@ namespace SalaJuntasFrontend.Controllers
 
             return View(UsuarioCrudViewnModel.Value);
         }
-
+        /// <summary>
+        /// Usuario Creacion
+        /// </summary>
+        /// <param name="usuarioCreacion"></param>
+        /// <returns></returns>
         [HttpPost]
-        public UsuarioRespuestaDTO CrearUsuarioApi([FromBody] UsuarioCreacionDTO usuarioCreacion)
+        public async Task<UsuarioRespuestaDTO> CrearUsuarioApi([FromBody] UsuarioCreacionDTO usuarioCreacion)
         {
             //Enviar al api la informacion
-            var nombre = usuarioCreacion.primerNombre;
-            return new UsuarioRespuestaDTO();
-
-        }
-
-
-        // POST: UsuariosController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
+            HttpClient client = localServiceSSL.VotarSSL();
+            var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/usuarios";
             try
             {
-                return RedirectToAction(nameof(Index));
+                string jsonUsuario = JsonConvert.SerializeObject(usuarioCreacion);
+                var content = new StringContent(jsonUsuario, System.Text.Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(url, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    var usuarioRespuestaDTO = JsonConvert.DeserializeObject<UsuarioRespuestaDTO>(responseBody);
+                    return usuarioRespuestaDTO;
+                }
+                else
+                {
+                    return new UsuarioRespuestaDTO()
+                    {
+                        mensaje = "404",
+                        codigoEstatus = 404,
+                        icono = "info",
+                    };
+                }
             }
-            catch
+            catch (HttpRequestException e)
             {
-                return View();
+                return new UsuarioRespuestaDTO()
+                {
+                    mensaje = e.Message,
+                    icono = "error",
+                };
+
             }
+
+
         }
+
 
         // GET: UsuariosController/Edit/5
         public async Task<ActionResult> Edit(int id)
@@ -242,6 +263,76 @@ namespace SalaJuntasFrontend.Controllers
 
 
 
+        }
+
+        /// <summary>
+        /// Realiza una peticion con el servidor
+        /// PUTASYNC para cambiar el estatus (activo,inactivo, proceso)
+        /// </summary>
+        /// <param name="idUsuario"></param>
+        /// <param name="claveEstatus"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<UsuarioRespuestaDTO> cambiarEstatus([FromQuery] int idUsuario, string claveEstatus)
+        {
+            //Hacemos una peticion para obtener todos los estatus, luego comparamos si en el array existe
+            HttpClient client = localServiceSSL.VotarSSL();
+            string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
+
+            string urlEstatus = "/api/Estatus";
+
+            var response = await client.GetAsync(baseAPI + urlEstatus);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var strListaEstatus = response.Content.ReadAsStringAsync();
+                var ListaEstatus = JsonConvert.DeserializeObject<List<EstatusDTO>>(strListaEstatus.Result);
+                EstatusDTO estatusDTO = ListaEstatus.FirstOrDefault(x => x.clave == claveEstatus);
+                if (estatusDTO != null)
+                {
+                    //Significa que hay el estatus que manda
+                    //Hacemos la operacion
+                    HttpClient client1 = localServiceSSL.VotarSSL();
+                    var content = new StringContent("");//Mandamos un json vacio 
+                    string UrlCambiarEstatus = baseAPI + $"/api/usuarios?idUsuario={idUsuario}&idEstatus={estatusDTO.id}";
+                    var response1 = await client1.PutAsync(UrlCambiarEstatus, content);
+                    if (response1.IsSuccessStatusCode)
+                    {
+                        var respuesta = response1.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<UsuarioRespuestaDTO>(respuesta.Result);
+                    }
+                    else
+                    {
+                        return new UsuarioRespuestaDTO
+                        {
+                            icono = "info",
+                            mensaje = "El servidor rechazo la conexcion",
+                            codigoEstatus = 404,
+
+                        };
+                    }
+
+                }
+                else
+                {
+                    //No existe el estatus
+                    return new UsuarioRespuestaDTO
+                    {
+                        codigoEstatus = 404,
+                        icono = "info",
+                        mensaje = "No coincide nigun estatus con el que esta enviando"
+                    };
+                }
+            }
+            else
+            {
+                //Fallo la conexion con el api o recibimos badrequest
+                return new UsuarioRespuestaDTO
+                {
+                    codigoEstatus = 404,
+                    icono = "info",
+                    mensaje = "El servidor rechazo la conexion"
+                };
+            }
         }
 
         // POST: UsuariosController/Edit/5

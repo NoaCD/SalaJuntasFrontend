@@ -9,11 +9,10 @@ function enviarControlador(type, url, JSONDATA) {
             console.log(data);
             if (data.icono == "success") {
                 mostrarAlertSwal("Perfecto", data.mensaje, "", data.icono);
-                let table = $("#example")
-                actualizarTablaAsyc(table);
+                actualizarTablaAsyc();
+                cerrarModal();
             } else {
                 mostrarAlertSwal(data.icono, data.mensaje, "", data.icono);
-
             }
         },
         error: function (err) {

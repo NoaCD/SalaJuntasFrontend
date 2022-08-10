@@ -56,9 +56,9 @@ function format(d) {
         '</table>'
     );
 }
-
+var table;
 $(document).ready(function () {
-    var table = $('#example').DataTable({
+    table = $('#example').DataTable({
         language: {
             "decimal": "",
             "emptyTable": "No hay información",
@@ -91,13 +91,13 @@ $(document).ready(function () {
                 action: () => $.get('/usuarios/create').done(function (response) {
                     console.log(response);
                     $('#modal').html(response);
-                    $('#modal').modal('show');
+                    abrirModal();
                 }).fail((error) => alert(`Tiempo agotado el servidor no responde: ${error}`))
             },
             {
 
                 text: '<i class="fa-solid fa-arrows-rotate"></i>',
-                action: () => actualizarTablaAsyc(table)
+                action: () => actualizarTablaAsyc()
             }
 
         ],
@@ -145,12 +145,12 @@ $(document).ready(function () {
 
             {
                 data: function (data) {
-                    let btnUnlock = `<a class="btn btn-dark" href="/usuario/block/${data.id}" id="${data.id}" ><i class="fa-solid fa-lock"></i></a>`;
+                    let btnUnlock = `<a class="btn btn-dark" onClick="cambiarEstatus(${data.id},'inactivo')" ><i class="fa-solid fa-lock"></i></a>`;
                     if (data.estatus.clave == 'proceso')
-                        btnUnlock = `<button class="btn btn-primary" id="${data.id}" ><i class="fa-solid fa-check"></i></button>`;
+                        btnUnlock = `<button class="btn btn-primary" onClick="cambiarEstatus(${data.id},'activo')" ><i class="fa-solid fa-check"></i></button>`;
                     if (data.estatus.clave == 'inactivo')
-                        btnUnlock = `<button class="btn btn-success" id="${data.id}" ><i class="fa-solid fa-unlock"></i></button>`;
-                    return `<a class="btn btn-warning" onclick="update(${data.id})" ><i class="fa-solid fa-pencil"></i></a> ${btnUnlock} <a class="btn btn-danger" id="${data.id}" ><i class="fa-solid fa-trash"></i></a>`
+                        btnUnlock = `<button class="btn btn-success" onClick="cambiarEstatus(${data.id},'activo')" ><i class="fa-solid fa-unlock"></i></button>`;
+                    return `<a class="btn btn-warning" onClick="update(${data.id})" ><i class="fa-solid fa-pencil"></i></a> ${btnUnlock} <a class="btn btn-danger" onClick="eliminarUsuario(${data.id})" ><i class="fa-solid fa-trash"></i></a>`
                 }
             },
 
@@ -175,10 +175,25 @@ $(document).ready(function () {
     });
 
 
-
-
 });
 
-function actualizarTablaAsyc(table) {
-    table.ajax.reload()
+function cerrarModal() {
+    $('#modal').modal('hide');
+}
+function abrirModal() {
+    $('#modal').modal('show');
+}
+
+function actualizarTablaAsyc() {
+    table.ajax.reload();
+}
+
+//Eliminar Usuario
+function eliminarUsuario(idUsuario) {
+    alert("eliminar a " + idUsuario);
+}
+
+///Funcion para cambiar estatus
+function cambiarEstatus(idUsuario, nombreEstatus) {
+    enviarControlador('PUT', `/usuarios/cambiarEstatus?idUsuario=${idUsuario}&claveEstatus=${nombreEstatus}` );
 }

@@ -4,7 +4,7 @@ $(document).ready(function () {
     init();
 });
 
-/**
+/**1
  * 
  * Funcion donde inicia el programa, 
  * El boton de guardar tiene un eventi click que al ejecutarse se active{
