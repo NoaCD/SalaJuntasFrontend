@@ -145,12 +145,12 @@ $(document).ready(function () {
 
             {
                 data: function (data) {
-                    let btnUnlock = `<a class="btn btn-dark" onClick="cambiarEstatus(${data.id},'inactivo')" ><i class="fa-solid fa-lock"></i></a>`;
+                    let btnUnlock = `<button class="btn btn-dark" onClick="cambiarEstatus(${data.id},'inactivo')" ><i class="fa-solid fa-lock"></i></button>`;
                     if (data.estatus.clave == 'proceso')
                         btnUnlock = `<button class="btn btn-primary" onClick="cambiarEstatus(${data.id},'activo')" ><i class="fa-solid fa-check"></i></button>`;
                     if (data.estatus.clave == 'inactivo')
                         btnUnlock = `<button class="btn btn-success" onClick="cambiarEstatus(${data.id},'activo')" ><i class="fa-solid fa-unlock"></i></button>`;
-                    return `<a class="btn btn-warning" onClick="update(${data.id})" ><i class="fa-solid fa-pencil"></i></a> ${btnUnlock} <a class="btn btn-danger" onClick="eliminarUsuario(${data.id})" ><i class="fa-solid fa-trash"></i></a>`
+                    return `<button class="btn btn-warning" onClick="update(${data.id})" ><i class="fa-solid fa-pencil"></i></button> ${btnUnlock} <a class="btn btn-danger" onClick="eliminarUsuario(${data.id})" ><i class="fa-solid fa-trash"></i></a>`
                 }
             },
 

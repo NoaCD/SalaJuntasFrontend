@@ -1,0 +1,88 @@
+﻿
+$(document).ready(function () {
+    validarFormulario();
+    init();
+});
+
+/**1
+ * 
+ * Funcion donde inicia el programa, 
+ * El boton de guardar tiene un eventi click que al ejecutarse se active{
+ * 
+ * 
+ * */
+function init() {
+    $("#actualizarUsuario").click(function () {
+        if ($("#formActualizarUsuario").valid() == true) {
+            let jsonUsuario = JSON.stringify(armarObjetoActualizacionUsuario());
+            enviarControlador("POST", "/Usuarios/guardarActualizacionUsuario", jsonUsuario);
+
+        } else {
+            mostrarAlertToast("Llena todos los campos obligatorios!", "info");
+
+        }
+    })
+}
+
+/**
+ * Se aplica JqueryValidate
+ * */
+function validarFormulario() {
+    $("#formActualizarUsuario").validate({
+        rules: {
+            "primerNombre": {
+                required: true,
+                minlength: 3,
+            },
+            "segundoNombre": {
+                minlength: 3
+            },
+            "apellidoPaterno": {
+                required: true,
+                minlength: 3
+            },
+            "apellidoMaterno": {
+                minlength: 3
+            },
+            "fechaNacimiento": {
+                required: true,
+            },
+            "departamento": {
+                required: true,
+            },
+            "cargo": {
+                required: true,
+            },
+           
+        },
+        messages: {
+            "primerNombre": {
+                required: "Este campo es requerido",
+                minlength: "Minimo 3 letras"
+            },
+            "segundoNombre": {
+                minlength: "Minimo 3 letras"
+            },
+            "apellidoPaterno": {
+                required: "Este campo es requerido",
+                minlength: "Minimo 3 letras"
+            },
+            "apellidoMaterno": {
+                minlength: "Minimo 3 letras"
+            },
+            "fechaNacimiento": {
+                required: "Este campo es requerido",
+            },
+            "departamento": {
+                required: "Seleccione un departamento",
+            },
+            "cargo": {
+                required: "Seleccione un cargo",
+            },
+         
+
+        }
+    });
+
+}
+

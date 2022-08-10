@@ -335,19 +335,16 @@ namespace SalaJuntasFrontend.Controllers
             }
         }
 
-        // POST: UsuariosController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        /// <summary>
+        /// Nos conectamos con el API y guardamos 
+        /// </summary>
+        /// <param name="usuarioEdicionDTO">DTO NECESARIO PARA REALIZAR LA EDICION</param>
+        /// <returns></returns>
+        public async Task<UsuarioRespuestaDTO> guardarActualizacionUsuario(UsuarioEdicionDTO usuarioEdicionDTO)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            
+
+            return new UsuarioRespuestaDTO();
         }
 
         // GET: UsuariosController/Delete/5
