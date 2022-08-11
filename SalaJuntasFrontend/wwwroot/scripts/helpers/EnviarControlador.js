@@ -58,6 +58,8 @@ function armarObjetoUsuario() {
  * retorna un objeto usuario para ser creado
  * */
 function armarObjetoActualizacionUsuario() {
+    let id = $("#idUsuario").val();
+    let idTipoUsuario = $("#idTipoUsuario").val();
     let primerNombre = $("#primerNombre").val();
     let segundoNombre = $("#segundoNombre").val();
     let apellidoPaterno = $("#apellidoPaterno").val();
@@ -68,8 +70,10 @@ function armarObjetoActualizacionUsuario() {
     let idEstatus = $("#idEstatus").val();
 
     let nuevoUsuario = {
+        "id":id,
         "idDepartamento": idDepartamento,
         "idCargo": idCargo,
+        "idTipoUsuario" : idTipoUsuario,
         "idEstatus": idEstatus,
         "primerNombre": primerNombre,
         "segundoNombre": segundoNombre,

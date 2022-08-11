@@ -150,7 +150,7 @@ $(document).ready(function () {
                         btnUnlock = `<button class="btn btn-primary" onClick="cambiarEstatus(${data.id},'activo')" ><i class="fa-solid fa-check"></i></button>`;
                     if (data.estatus.clave == 'inactivo')
                         btnUnlock = `<button class="btn btn-success" onClick="cambiarEstatus(${data.id},'activo')" ><i class="fa-solid fa-unlock"></i></button>`;
-                    return `<button class="btn btn-warning" onClick="update(${data.id})" ><i class="fa-solid fa-pencil"></i></button> ${btnUnlock} <a class="btn btn-danger" onClick="eliminarUsuario(${data.id})" ><i class="fa-solid fa-trash"></i></a>`
+                    return `<button class="btn btn-warning" onClick="update(${data.id})" ><i class="fa-solid fa-pencil"></i></button> ${btnUnlock} <button class="btn btn-secondary" onClick="cambiarContrasenia(${data.id},\'${data.primerNombre + ' ' + data.apellidoPaterno} \')" ><i class="fa-solid fa-key"></i></button> <button class="btn btn-danger" onClick="eliminarUsuario(${data.id},\'${data.primerNombre + ' ' + data.apellidoPaterno} \')" ><i class="fa-solid fa-trash"></i></button>`
                 }
             },
 
@@ -189,11 +189,85 @@ function actualizarTablaAsyc() {
 }
 
 //Eliminar Usuario
-function eliminarUsuario(idUsuario) {
-    alert("eliminar a " + idUsuario);
+function eliminarUsuario(idUsuario, nombre) {
+    const SwalAlert = alertaConfirmada();
+    SwalAlert.fire({
+        title: `¿Estas seguro de eliminar a ${nombre}?`,
+        text: 'Este cambio no podra revertirse',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminalo',
+        cancelButtonText: 'Cancelalo',
+        reverseButtons: true
+    }).then((result) => {
+        let confirmo = false;
+        if (result.isConfirmed) {
+            confirmo = true;
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            confirmo = false;
+        }
+        alert(confirmo);
+    })
+
 }
+
+//FUNCION PARA CAMBIAR LA CONTRASEÑA DEL USUARIO
+function cambiarContrasenia(idUsuario, nombre) {
+    const SwalAlert = alertaConfirmada();
+
+    SwalAlert.fire({
+        title: `La contraseña de ${nombre} cambiara`,
+        text: 'Este cambio no podra revertirse',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, quiero cambiarla',
+        cancelButtonText: 'Cancelalo',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Añada sus nuevas credenciales',
+                html: `<input type="password" id="password" class="swal2-input" placeholder="Escribe la nueva contraseña">
+  <input type="password" id="passwordConfirm" class="swal2-input" placeholder="Confirma tu cantraseña">`,
+                confirmButtonText: 'Actualizar',
+                focusConfirm: false,
+                preConfirm: () => {
+                    const password = Swal.getPopup().querySelector('#password').value
+                    const passwordConfirm = Swal.getPopup().querySelector('#passwordConfirm').value
+                    if (!passwordConfirm || !password) {
+                        Swal.showValidationMessage(`Porfavor introduzca la contraseña`)
+                    } else if (password != passwordConfirm) {
+                        Swal.showValidationMessage(`La contraseña no coincide, porfavor verifique`)
+                    }
+                    return { password: password, passwordConfirm: passwordConfirm }
+                }
+            }).then((result) => {
+                //              Swal.fire(`
+                //  Password: ${result.value.password}
+                //  PasswordConfirm: ${result.value.passwordConfirm}
+                //`.trim())
+                /*Ya tenemos las nuevas credenciales*/
+
+                let oUsuario = {
+                    "idUsuario": idUsuario,
+                    "password": result.value.password
+                }
+                let JSONUsuario = JSON.stringify(oUsuario);
+
+                enviarControlador('PUT', '/usuarios/cambiarContrasenia', JSONUsuario);
+
+            })
+
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+        }
+
+    })
+}
+
+
 
 ///Funcion para cambiar estatus
 function cambiarEstatus(idUsuario, nombreEstatus) {
-    enviarControlador('PUT', `/usuarios/cambiarEstatus?idUsuario=${idUsuario}&claveEstatus=${nombreEstatus}` );
+    enviarControlador('PUT', `/usuarios/cambiarEstatus?idUsuario=${idUsuario}&claveEstatus=${nombreEstatus}`);
 }

@@ -16,6 +16,8 @@
 @section body{
 <form id="formActualizarUsuario">
     <input type="hidden" id="idEstatus" value="@Model.usuario.estatus.id" />
+    <input type="hidden" id="idUsuario" value="@Model.usuario.id" />
+    <input type="hidden" id="idTipoUsuario" value="@Model.usuario.tipoUsuario.id" />
     <div class="mb-3">
         <label for="primerNombre" class="form-label">Primer Nombre</label>
         <input value="@Model.usuario.primerNombre" type="text" class="form-control" id="primerNombre" name="primerNombre" aria-describedby="primerNombre">
@@ -86,7 +88,7 @@
 
 }
 @section buttons{
-<button type="button" class="btn btn-primary" id="actualizarUsuario">Guardar</button>
+<button type="button" class="btn btn-primary" id="actualizarUsuario">Actualizar</button>
 
 }
 

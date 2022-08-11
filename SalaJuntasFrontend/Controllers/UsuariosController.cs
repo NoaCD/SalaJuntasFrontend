@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SalaJuntasFrontend.Models;
+using SalaJuntasFrontend.Models.DTOS.Usuarios;
 using SalaJuntasFrontend.Servicios;
 
 namespace SalaJuntasFrontend.Controllers
@@ -335,17 +336,89 @@ namespace SalaJuntasFrontend.Controllers
             }
         }
 
+
+        [HttpPut]
         /// <summary>
         /// Nos conectamos con el API y guardamos 
         /// </summary>
         /// <param name="usuarioEdicionDTO">DTO NECESARIO PARA REALIZAR LA EDICION</param>
         /// <returns></returns>
-        public async Task<UsuarioRespuestaDTO> guardarActualizacionUsuario(UsuarioEdicionDTO usuarioEdicionDTO)
+        public async Task<UsuarioRespuestaDTO> guardarActualizacionUsuario(int id, [FromBody] UsuarioEdicionDTO usuarioEdicionDTO)
         {
-            
+            HttpClient client = localServiceSSL.VotarSSL();
+            string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
 
-            return new UsuarioRespuestaDTO();
+            var content = new StringContent(JsonConvert.SerializeObject(usuarioEdicionDTO), System.Text.Encoding.UTF8, "application/json");//Mandamos un json vacio 
+            string urlUpdateUser = baseAPI + $"/api/usuarios/{id}";
+            var response = await client.PutAsync(urlUpdateUser, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var userResponse = await response.Content.ReadAsStringAsync();
+                var usuarioRespuestaDTO = JsonConvert.DeserializeObject<UsuarioRespuestaDTO>(userResponse);
+                return usuarioRespuestaDTO;
+            }
+            else
+            {
+                return new UsuarioRespuestaDTO()
+                {
+                    codigoEstatus = 404,
+                    icono = "error",
+                    mensaje = "Rechazo la conexion",
+
+                };
+            }
+
         }
+
+        [HttpPut]
+        /// <summary>
+        /// Endpoint que se conecta con el API
+        /// </summary>
+        /// <param name="cambiarContraseniaDTO"></param>
+        /// <returns>UsuarioRespuestaDTO</returns>
+        public async Task<UsuarioRespuestaDTO> cambiarContrasenia([FromBody] CambiarContraseniaDTO cambiarContraseniaDTO)
+        {
+            if (cambiarContraseniaDTO.idUsuario != 0 && cambiarContraseniaDTO.password != null)
+            {
+                HttpClient client = localServiceSSL.VotarSSL();
+                var jsonUser = JsonConvert.SerializeObject(cambiarContraseniaDTO);
+                var content = new StringContent(jsonUser, System.Text.Encoding.UTF8, "application/json");
+                string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
+                string url = baseAPI + "/api/usuarios/cambiar-contrasenia";
+                var response = await client.PutAsync(url, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var resp = await response.Content.ReadAsStringAsync();
+                    var usuarioRespuestaDTO = JsonConvert.DeserializeObject<UsuarioRespuestaDTO>(resp);
+                    return usuarioRespuestaDTO;
+
+                }
+                else
+                {
+                    return new UsuarioRespuestaDTO()
+                    {
+                        codigoEstatus = 400,
+                        icono = "error",
+                        mensaje = "El api rechazo la conexion",
+
+                    };
+                }
+
+            }
+            else
+            {
+                return new UsuarioRespuestaDTO()
+                {
+                    codigoEstatus = 200,
+                    icono = "info",
+                    mensaje = "No estas enviando el identificador ni la passowrd",
+
+                };
+            }
+        }
+
 
         // GET: UsuariosController/Delete/5
         public ActionResult Delete(int id)
@@ -353,19 +426,5 @@ namespace SalaJuntasFrontend.Controllers
             return View();
         }
 
-        // POST: UsuariosController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

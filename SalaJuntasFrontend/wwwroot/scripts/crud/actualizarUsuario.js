@@ -15,12 +15,13 @@ function init() {
     $("#actualizarUsuario").click(function () {
         if ($("#formActualizarUsuario").valid() == true) {
             let jsonUsuario = JSON.stringify(armarObjetoActualizacionUsuario());
-            enviarControlador("POST", "/Usuarios/guardarActualizacionUsuario", jsonUsuario);
-
+            let oUsuario = JSON.parse(jsonUsuario);
+            enviarControlador("PUT", `/Usuarios/guardarActualizacionUsuario/${oUsuario.id}`, jsonUsuario);
         } else {
             mostrarAlertToast("Llena todos los campos obligatorios!", "info");
 
         }
+        return false;
     })
 }
 
