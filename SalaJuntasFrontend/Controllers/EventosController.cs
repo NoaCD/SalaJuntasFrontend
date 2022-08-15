@@ -82,6 +82,10 @@ namespace SalaJuntasFrontend.Controllers
         }
 
         // GET: EventosController/Create
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Create()
         {
             return View();
@@ -107,6 +111,7 @@ namespace SalaJuntasFrontend.Controllers
         {
             return View();
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -127,6 +132,7 @@ namespace SalaJuntasFrontend.Controllers
                 return View();
             }
         }
+
         /// <summary>
         /// 
         /// </summary>

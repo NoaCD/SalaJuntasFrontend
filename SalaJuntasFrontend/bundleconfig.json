@@ -1,0 +1,19 @@
+[
+  {
+    "outputFileName": "wwwroot/scriptsminifi/agenda.min.js",
+    "inputFiles": [
+      "wwwroot/scripts/agenda.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/scriptsminifi/alerts.min.js",
+    "inputFiles": [
+      "wwwroot/scripts/alerts.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/scriptsminifi/funcionesPropias.min.js",
+    "inputFiles": ["wwwroot/scripts/funcionesPropias.js"]
+
+  }
+]
