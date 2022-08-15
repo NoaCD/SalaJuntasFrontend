@@ -15,9 +15,8 @@ function update(id) {
         url: `/usuarios/edit/${id}`,
         success: function (data) {
             $("#modal").html(data);
+            $("#modal").modal("show");
             console.log(data);
-            //Esperamos para que llegue la respuesta
-            setTimeout(() => { $("#modal").modal('show') ; }, 100);
         },
         error: function (err) {
             console.log(err);
