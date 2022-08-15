@@ -177,6 +177,7 @@ $(document).ready(function () {
 
 });
 
+
 function cerrarModal() {
     $('#modal').modal('hide');
 }
@@ -200,13 +201,13 @@ function eliminarUsuario(idUsuario, nombre) {
         cancelButtonText: 'Cancelalo',
         reverseButtons: true
     }).then((result) => {
-        let confirmo = false;
+        
         if (result.isConfirmed) {
-            confirmo = true;
+            enviarControlador('DELETE', '/usuarios/delete/'+ idUsuario );
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             confirmo = false;
         }
-        alert(confirmo);
+       
     })
 
 }
@@ -239,6 +240,11 @@ function cambiarContrasenia(idUsuario, nombre) {
                     } else if (password != passwordConfirm) {
                         Swal.showValidationMessage(`La contraseña no coincide, porfavor verifique`)
                     }
+                    if (password.length <= 4 && passwordConfirm.length <= 4) {
+                        Swal.showValidationMessage(`La contraseña debe tener mas de 4 digitos`)
+
+                    }
+
                     return { password: password, passwordConfirm: passwordConfirm }
                 }
             }).then((result) => {
@@ -266,8 +272,9 @@ function cambiarContrasenia(idUsuario, nombre) {
 }
 
 
-
 ///Funcion para cambiar estatus
 function cambiarEstatus(idUsuario, nombreEstatus) {
     enviarControlador('PUT', `/usuarios/cambiarEstatus?idUsuario=${idUsuario}&claveEstatus=${nombreEstatus}`);
+
 }
+

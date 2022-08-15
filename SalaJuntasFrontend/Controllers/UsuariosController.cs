@@ -421,9 +421,35 @@ namespace SalaJuntasFrontend.Controllers
 
 
         // GET: UsuariosController/Delete/5
-        public ActionResult Delete(int id)
+        /// <summary>
+        /// Nos conectamos con el apí para eliminar al usuario
+        /// </summary>
+        /// <param name="id">id del usuario a eliminar</param>
+        /// <returns></returns>
+
+        public async Task<ActionResult<UsuarioRespuestaDTO>> Delete(int id)
         {
-            return View();
+            HttpClient client = localServiceSSL.VotarSSL();
+
+            string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
+
+            string url = baseAPI + "/api/usuarios/" + id;
+            var response = await client.DeleteAsync(url);
+            var r = await response.Content.ReadAsStringAsync();
+            if (r != null)
+            {
+                UsuarioRespuestaDTO oUserResponse = JsonConvert.DeserializeObject<UsuarioRespuestaDTO>(r);
+                return oUserResponse;
+            }
+            else
+            {
+                return 
+                new UsuarioRespuestaDTO() {
+                    icono = "error",
+                    codigoEstatus = 404,
+                    mensaje = "Fallamos en al conectarnos con el api"
+                };
+            }
         }
 
     }
