@@ -166,7 +166,7 @@ namespace SalaJuntasFrontend.Controllers
                     var listCargosDTO = JsonConvert.DeserializeObject<List<CargoDTO>>(ListaCargosResponseBody);
 
 
-                    var editarUsuarioModel = new UsuarioCRUDViewModel
+                    var editarUsuarioModel =  new UsuarioCRUDViewModel
                     {
                         tiposUsuario = listaTiposUsuarioDTO,
                         cargos = listCargosDTO,
@@ -175,6 +175,7 @@ namespace SalaJuntasFrontend.Controllers
                         icono = "success",
                         mensaje = "Recuperado correctamente"
                     };
+
                     return View(editarUsuarioModel);
 
                     // Above three lines can be replaced with new helper method below
