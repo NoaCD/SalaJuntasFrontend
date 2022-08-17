@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="/css/layout.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SalaJuntasFrontend.styles.css" asp-append-version="true" />
-
     @RenderSection("Styles",required:false)
 
 </head>
@@ -79,7 +78,7 @@
                                 <a class="nav-link text-light" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" href="#">Departamentos</a>
+                                <a class="nav-link text-light" asp-controller="Departamentos" asp-action="Index">Departamentos</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" href="#">Areas</a>
