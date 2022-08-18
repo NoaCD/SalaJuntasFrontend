@@ -5,7 +5,7 @@ namespace ApiSalaJuntas.Model.DTOS.Areas
     public class AreaCreacionDTO
     {
         [Required(ErrorMessage = "{0} es obligatorio")]
-        public int idEstatus { get; set; }
+        public int idEstatus { get; set; } = 1;
         [Required(ErrorMessage = "{0} es obligatorio")]
         [MaxLength(60)]
         public string nombre { get; set; }

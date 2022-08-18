@@ -27,6 +27,35 @@ namespace SalaJuntasFrontend.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Obtenemos el correo del usuario por el id 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult<UsuarioRespuestaDTO>> GetEmailByIdUser(int id)
+        {
+            HttpClient client = localServiceSSL.VotarSSL();
+            var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/usuarios/GetEmailByIdUser?idUser=" + id;
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                var r = response.StatusCode;
+                if (r == System.Net.HttpStatusCode.OK)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    // Above three lines can be replaced with new helper method below
+                    // string responseBody = await client.GetStringAsync(uri);
+                    var usuarioRespuesta = JsonConvert.DeserializeObject<UsuarioRespuestaDTO>(responseBody);
+                    return usuarioRespuesta;
+
+                }
+                return BadRequest("No hay conexion con el API");
+            }
+            catch (HttpRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
 
         // GET: UsuariosController
         /// <summary>
@@ -67,12 +96,6 @@ namespace SalaJuntasFrontend.Controllers
                 return BadRequest(e.Message);
             }
 
-        }
-
-        // GET: UsuariosController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
         }
 
         // GET: UsuariosController/Create
@@ -166,7 +189,7 @@ namespace SalaJuntasFrontend.Controllers
                     var listCargosDTO = JsonConvert.DeserializeObject<List<CargoDTO>>(ListaCargosResponseBody);
 
 
-                    var editarUsuarioModel =  new UsuarioCRUDViewModel
+                    var editarUsuarioModel = new UsuarioCRUDViewModel
                     {
                         tiposUsuario = listaTiposUsuarioDTO,
                         cargos = listCargosDTO,
@@ -380,7 +403,7 @@ namespace SalaJuntasFrontend.Controllers
         /// <returns>UsuarioRespuestaDTO</returns>
         public async Task<UsuarioRespuestaDTO> cambiarContrasenia([FromBody] CambiarContraseniaDTO cambiarContraseniaDTO)
         {
-            if (cambiarContraseniaDTO.idUsuario != 0 && cambiarContraseniaDTO.password != null)
+            if (cambiarContraseniaDTO.idUsuario != 0 && cambiarContraseniaDTO.password != null && cambiarContraseniaDTO.email != null)
             {
                 HttpClient client = localServiceSSL.VotarSSL();
                 var jsonUser = JsonConvert.SerializeObject(cambiarContraseniaDTO);
@@ -414,7 +437,7 @@ namespace SalaJuntasFrontend.Controllers
                 {
                     codigoEstatus = 200,
                     icono = "info",
-                    mensaje = "No estas enviando el identificador ni la passowrd",
+                    mensaje = "No estas enviando el identificador ni la passowrd o el correo",
 
                 };
             }
@@ -444,8 +467,9 @@ namespace SalaJuntasFrontend.Controllers
             }
             else
             {
-                return 
-                new UsuarioRespuestaDTO() {
+                return
+                new UsuarioRespuestaDTO()
+                {
                     icono = "error",
                     codigoEstatus = 404,
                     mensaje = "Fallamos en al conectarnos con el api"

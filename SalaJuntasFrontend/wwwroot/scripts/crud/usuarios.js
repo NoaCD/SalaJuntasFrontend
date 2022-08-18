@@ -200,13 +200,13 @@ function eliminarUsuario(idUsuario, nombre) {
         cancelButtonText: 'Cancelalo',
         reverseButtons: true
     }).then((result) => {
-        
+
         if (result.isConfirmed) {
-            enviarControlador('DELETE', '/usuarios/delete/'+ idUsuario );
+            enviarControlador('DELETE', '/usuarios/delete/' + idUsuario);
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             confirmo = false;
         }
-       
+
     })
 
 }
@@ -214,6 +214,9 @@ function eliminarUsuario(idUsuario, nombre) {
 //FUNCION PARA CAMBIAR LA CONTRASEÑA DEL USUARIO
 function cambiarContrasenia(idUsuario, nombre) {
     const SwalAlert = alertaConfirmada();
+    ///Hacemos Fetch para obtener el correo del usuario por si desea cambiarlo
+    let email = '';
+    fetch("/Usuarios/GetEmailByIdUser?id=" + idUsuario).then((data) => data.json()).then((jsondata) => email = jsondata.mensaje );
 
     SwalAlert.fire({
         title: `La contraseña de ${nombre} cambiara`,
@@ -227,14 +230,21 @@ function cambiarContrasenia(idUsuario, nombre) {
         if (result.isConfirmed) {
             Swal.fire({
                 title: 'Añada sus nuevas credenciales',
-                html: `<input type="password" id="password" class="swal2-input" placeholder="Escribe la nueva contraseña">
+                html: ` <input type="email" id="email" class="swal2-input" value="${email}" placeholder="Email"> <input type="password" id="password" class="swal2-input" placeholder="Escribe la nueva contraseña">
   <input type="password" id="passwordConfirm" class="swal2-input" placeholder="Confirma tu cantraseña">`,
                 confirmButtonText: 'Actualizar',
                 focusConfirm: false,
                 preConfirm: () => {
+                    const email = Swal.getPopup().querySelector('#email').value
                     const password = Swal.getPopup().querySelector('#password').value
                     const passwordConfirm = Swal.getPopup().querySelector('#passwordConfirm').value
-                    if (!passwordConfirm || !password) {
+                    if (validarEmail(email) == false) {
+                        Swal.showValidationMessage(`Escriba un email valido`)
+                    }
+                    if (!email) {
+                        Swal.showValidationMessage(`El email es requerido`)
+                    }
+                    if (!passwordConfirm || !password  ) {
                         Swal.showValidationMessage(`Porfavor introduzca la contraseña`)
                     } else if (password != passwordConfirm) {
                         Swal.showValidationMessage(`La contraseña no coincide, porfavor verifique`)
@@ -244,7 +254,7 @@ function cambiarContrasenia(idUsuario, nombre) {
 
                     }
 
-                    return { password: password, passwordConfirm: passwordConfirm }
+                    return { password: password, passwordConfirm: passwordConfirm, email: email }
                 }
             }).then((result) => {
                 //              Swal.fire(`
@@ -255,7 +265,9 @@ function cambiarContrasenia(idUsuario, nombre) {
 
                 let oUsuario = {
                     "idUsuario": idUsuario,
-                    "password": result.value.password
+                    "password": result.value.password,
+                    "email": result.value.email
+
                 }
                 let JSONUsuario = JSON.stringify(oUsuario);
 
@@ -277,3 +289,10 @@ function cambiarEstatus(idUsuario, nombreEstatus) {
 
 }
 
+function validarEmail(valor) {
+    if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(valor)) {
+        return true;
+    } else {
+        return false;
+    }
+}
