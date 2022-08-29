@@ -17,7 +17,6 @@
 <form id="formActualizarUsuario">
     <input type="hidden" id="idEstatus" value="@Model.usuario.estatus.id" />
     <input type="hidden" id="idUsuario" value="@Model.usuario.id" />
-    <input type="hidden" id="idTipoUsuario" value="@Model.usuario.tipoUsuario.id" />
     <div class="mb-3">
         <label for="primerNombre" class="form-label">Primer Nombre</label>
         <input value="@Model.usuario.primerNombre" type="text" class="form-control" id="primerNombre" name="primerNombre" aria-describedby="primerNombre">
@@ -83,6 +82,24 @@
         <div id="msgDepartamento" class="form-text">Este campo sera visible para todos</div>
 
     </div>
+        <div class="mb-3">
+        <label for="tipoUsuario" class="form-label">Tipo Usuario</label>
+        <select class="form-select" aria-label="cargo" name="cargo" id="idTipoUsuario">
+            <option value="@Model.usuario.tipoUsuario.id" selected> @Model.usuario.tipoUsuario.nombre </option>
+            @if(Model.icono != "error"){
+            @foreach( var tipoUsuario in Model.tiposUsuario )
+            {
+            <option value="@tipoUsuario.id"> @tipoUsuario.nombre </option>
+
+            }
+            }else{
+            <option> @Model.icono | @Model.mensaje </option>
+            }
+
+        </select>
+        <div id="msgTipoUsuario" class="form-text">Este campo sera visible para todos</div>
+
+    </div>
 
 </form>
 
@@ -92,6 +109,8 @@
 }
 
 @section Scripts{
+<script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
 <script type="text/javascript" src="~/scripts/crud/actualizarUsuario.js"></script>
 
 }
