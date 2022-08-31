@@ -49,24 +49,24 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active" style="visibility : hidden" aria-current="page" href="#">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
+                            <a class="nav-link" style="visibility : hidden" href="#">Link</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" style="visibility : hidden" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Dropdown
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><a style="visibility : hidden" class="dropdown-item" href="#">Action</a></li>
+                                <li><a style="visibility : hidden" class="dropdown-item" href="#">Another action</a></li>
+                                <li><hr style="visibility : hidden" class="dropdown-divider"></li>
+                                <li><a style="visibility : hidden" class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                            <a class="nav-link disabled" href="#" tabindex="-1" style="visibility : hidden" aria-disabled="true">Disabled</a>
                         </li>
                     </ul>
                     <form class="d-flex">
@@ -74,18 +74,33 @@
                             <li class="nav-item">
                                 <a class="nav-link active text-light" asp-controller="Home" asp-action="Index">Inicio</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Departamentos" asp-action="Index">Departamentos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Areas" asp-action="Index">Areas</a>
-                            </li>
+                            @if (User.IsInRole("supersu") || User.IsInRole("admin") || User.IsInRole("moderador"))
+                            {
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-controller="Departamentos" asp-action="Index">Departamentos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-controller="Areas" asp-action="Index">Areas</a>
+                                </li>
+                            }
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle bg-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    user_name
+                                    @{
+                                        string UserName = "Invitado";
+                                    }
+
+                                    @if (User.IsInRole("supersu") || User.IsInRole("admin") || User.IsInRole("moderador") || User.IsInRole("cliente"))
+                                    {
+                                        UserName = User.Claims.Where(x => x.Type == "UserName").FirstOrDefault().Value;
+
+                                    }
+
+                                    @UserName
+
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="#">Mi Perfil</a></li>

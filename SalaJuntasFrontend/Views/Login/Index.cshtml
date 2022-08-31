@@ -1,10 +1,14 @@
-﻿@*
+﻿@using SalaJuntasFrontend.Models.DTOS.Login
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     Layout = null;
 
 }
+@model CredencialesAcceso;
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +26,7 @@
                         <img src="~/lib/images/tzolkin.jpg" class="img-fluid" alt="Sample image">
                     </div>
                     <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                        <form asp-action="login" asp-controller="">
+                        <form asp-action="validarUsuario" asp-controller="Login" method="post" >
                             <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                                 <p class="lead fw-normal mb-0 me-3">Sign in with</p>
                                 <button type="button" class="btn btn-primary btn-floating mx-1">
@@ -44,15 +48,15 @@
 
                             <!-- Email input -->
                             <div class="form-outline mb-4">
-                                <input type="email" id="form3Example3" class="form-control form-control-lg"
-                                       placeholder="Enter a valid email address" />
+                                <input  type="email" id="formEmail" required class="form-control form-control-lg"
+                                       placeholder="Enter a valid email address" asp-for="Email" />
                                 <label class="form-label" for="form3Example3">Email address</label>
                             </div>
 
                             <!-- Password input -->
                             <div class="form-outline mb-3">
-                                <input type="password" id="form3Example4" class="form-control form-control-lg"
-                                       placeholder="Enter password" />
+                                <input type="password" id="form3Example4" required class="form-control form-control-lg"
+                                       placeholder="Enter password" asp-for="Password" />
                                 <label class="form-label" for="form3Example4">Password</label>
                             </div>
 
@@ -68,7 +72,7 @@
                             </div>
 
                             <div class="text-center text-lg-start mt-4 pt-2">
-                                <button type="button" class="btn btn-primary btn-lg"
+                                <button type="submit" class="btn btn-primary btn-lg"
                                         style="padding-left: 2.5rem; padding-right: 2.5rem;">
                                     Login
                                 </button>
@@ -77,7 +81,7 @@
                                                               class="link-danger">Register</a>
                                 </p>
                             </div>
-
+                             <h4 class="text-center text-dark">@Html.ValidationMessage("loginErrors")</h4>
                         </form>
                     </div>
                 </div>

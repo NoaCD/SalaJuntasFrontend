@@ -4,16 +4,16 @@ using ApiSalaJuntas.Model.DTOS.Departamentos;
 using ApiSalaJuntas.Model.DTOS.Estatus;
 using ApiSalaJuntas.Model.DTOS.Usuarios;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SalaJuntasFrontend.Models;
 using SalaJuntasFrontend.Models.DTOS.Usuarios;
 using SalaJuntasFrontend.Servicios;
-using System.Net.Http.Headers;
 
 namespace SalaJuntasFrontend.Controllers
 {
+    [Authorize]
     public class UsuariosController : Controller
     {
 
@@ -34,8 +34,15 @@ namespace SalaJuntasFrontend.Controllers
         /// <returns></returns>
         public async Task<ActionResult<UsuarioRespuestaDTO>> GetEmailByIdUser(int id)
         {
-            HttpClient client = localServiceSSL.VotarSSL();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ2lvdGV4LmNvbSIsImV4cCI6MTY2MTgxODUwOH0.6-jsihGJKoovLZziIJgL_1u0iJIcgAK_B6-Ww0wfsgk");
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
             var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/usuarios/GetEmailByIdUser?idUser=" + id;
             try
             {
@@ -75,9 +82,16 @@ namespace SalaJuntasFrontend.Controllers
         /// <returns> Lista Usuarios DTO </returns>
         public async Task<ActionResult<List<UsuarioDTO>>> TodosUsuarios()
         {
-            HttpClient client = localServiceSSL.VotarSSL();
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
             var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/usuarios";
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ2lvdGV4LmNvbSIsImV4cCI6MTY2MTgxODUwOH0.6-jsihGJKoovLZziIJgL_1u0iJIcgAK_B6-Ww0wfsgk");
 
             try
             {
@@ -116,10 +130,17 @@ namespace SalaJuntasFrontend.Controllers
         /// <param name="usuarioCreacion">DTO necesario para crear un usuario</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<UsuarioRespuestaDTO> CrearUsuarioApi([FromBody] UsuarioCreacionDTO usuarioCreacion)
+        public async Task<ActionResult<UsuarioRespuestaDTO>> CrearUsuarioApi([FromBody] UsuarioCreacionDTO usuarioCreacion)
         {
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
             //Enviar al api la informacion
-            HttpClient client = localServiceSSL.VotarSSL();
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
             var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/usuarios";
             try
             {
@@ -165,10 +186,17 @@ namespace SalaJuntasFrontend.Controllers
         /// <returns></returns>
         public async Task<ActionResult> Edit(int id)
         {
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+
             string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
             //Hacemos una peticion para obtener todos los datos del usuario
-            HttpClient client = localServiceSSL.VotarSSL();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ2lvdGV4LmNvbSIsImV4cCI6MTY2MTgxODUwOH0.6-jsihGJKoovLZziIJgL_1u0iJIcgAK_B6-Ww0wfsgk");
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
 
             //URL Usuario GET BY ID
             var url = baseAPI + "/api/usuarios/" + id;
@@ -235,12 +263,16 @@ namespace SalaJuntasFrontend.Controllers
         /// <returns>  </returns>
         private async Task<ActionResult<UsuarioCRUDViewModel>> GetDataCrudUser()
         {
-            
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
             string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
             //Hacemos una peticion para obtener todos los datos del usuario
-            HttpClient client = localServiceSSL.VotarSSL();
-            //Insertamos Token
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ2lvdGV4LmNvbSIsImV4cCI6MTY2MTgxODUwOH0.6-jsihGJKoovLZziIJgL_1u0iJIcgAK_B6-Ww0wfsgk");
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
             //URL GET Departamentos
             var url2 = baseAPI + "/api/departamento/obtener-todos";
             //URL TiposUsuarios
@@ -318,11 +350,19 @@ namespace SalaJuntasFrontend.Controllers
         /// <param name="claveEstatus"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<UsuarioRespuestaDTO> cambiarEstatus([FromQuery] int idUsuario, string claveEstatus)
+        public async Task<ActionResult<UsuarioRespuestaDTO>> cambiarEstatus([FromQuery] int idUsuario, string claveEstatus)
         {
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+
             //Hacemos una peticion para obtener todos los estatus, luego comparamos si en el array existe
-            HttpClient client = localServiceSSL.VotarSSL();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ2lvdGV4LmNvbSIsImV4cCI6MTY2MTgxODUwOH0.6-jsihGJKoovLZziIJgL_1u0iJIcgAK_B6-Ww0wfsgk");
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
+
 
             string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
 
@@ -338,8 +378,8 @@ namespace SalaJuntasFrontend.Controllers
                 {
                     //Significa que hay el estatus que manda
                     //Hacemos la operacion
-                    HttpClient client1 = localServiceSSL.VotarSSL();
-                    client1.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ2lvdGV4LmNvbSIsImV4cCI6MTY2MTgxODUwOH0.6-jsihGJKoovLZziIJgL_1u0iJIcgAK_B6-Ww0wfsgk");
+                    HttpClient client1 = localServiceSSL.VotarSSL(tokenClaim.Value);
+
 
                     var content = new StringContent("");//Mandamos un json vacio 
                     string UrlCambiarEstatus = baseAPI + $"/api/usuarios?idUsuario={idUsuario}&idEstatus={estatusDTO.id}";
@@ -391,10 +431,16 @@ namespace SalaJuntasFrontend.Controllers
         /// </summary>
         /// <param name="usuarioEdicionDTO">DTO NECESARIO PARA REALIZAR LA EDICION</param>
         /// <returns></returns>
-        public async Task<UsuarioRespuestaDTO> guardarActualizacionUsuario(int id, [FromBody] UsuarioEdicionDTO usuarioEdicionDTO)
+        public async Task<ActionResult<UsuarioRespuestaDTO>> guardarActualizacionUsuario(int id, [FromBody] UsuarioEdicionDTO usuarioEdicionDTO)
         {
-            HttpClient client = localServiceSSL.VotarSSL();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ2lvdGV4LmNvbSIsImV4cCI6MTY2MTgxODUwOH0.6-jsihGJKoovLZziIJgL_1u0iJIcgAK_B6-Ww0wfsgk");
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
             string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
 
             var content = new StringContent(JsonConvert.SerializeObject(usuarioEdicionDTO), System.Text.Encoding.UTF8, "application/json");//Mandamos un json vacio 
@@ -425,12 +471,19 @@ namespace SalaJuntasFrontend.Controllers
         /// </summary>
         /// <param name="cambiarContraseniaDTO"></param>
         /// <returns>UsuarioRespuestaDTO</returns>
-        public async Task<UsuarioRespuestaDTO> cambiarContrasenia([FromBody] CambiarContraseniaDTO cambiarContraseniaDTO)
+        public async Task<ActionResult<UsuarioRespuestaDTO>> cambiarContrasenia([FromBody] CambiarContraseniaDTO cambiarContraseniaDTO)
         {
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+
             if (cambiarContraseniaDTO.idUsuario != 0 && cambiarContraseniaDTO.password != null && cambiarContraseniaDTO.email != null)
             {
-                HttpClient client = localServiceSSL.VotarSSL();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ2lvdGV4LmNvbSIsImV4cCI6MTY2MTgxODUwOH0.6-jsihGJKoovLZziIJgL_1u0iJIcgAK_B6-Ww0wfsgk");
+                HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
                 var jsonUser = JsonConvert.SerializeObject(cambiarContraseniaDTO);
                 var content = new StringContent(jsonUser, System.Text.Encoding.UTF8, "application/json");
                 string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
@@ -478,14 +531,21 @@ namespace SalaJuntasFrontend.Controllers
 
         public async Task<ActionResult<UsuarioRespuestaDTO>> Delete(int id)
         {
-            HttpClient client = localServiceSSL.VotarSSL();
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
 
+
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
             string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
 
             string url = baseAPI + "/api/usuarios/" + id;
             var response = await client.DeleteAsync(url);
             var r = await response.Content.ReadAsStringAsync();
-            if (r != null)
+            if (r != null && r != "")
             {
                 UsuarioRespuestaDTO oUserResponse = JsonConvert.DeserializeObject<UsuarioRespuestaDTO>(r);
                 return oUserResponse;

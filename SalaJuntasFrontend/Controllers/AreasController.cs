@@ -1,5 +1,6 @@
 ﻿using ApiSalaJuntas.Model.DTOS.Areas;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -7,6 +8,7 @@ using SalaJuntasFrontend.Servicios;
 
 namespace SalaJuntasFrontend.Controllers
 {
+    [Authorize]
     public class AreasController : Controller
     {
         public HttpsLocalService localServiceSSL = new HttpsLocalService();
@@ -28,7 +30,14 @@ namespace SalaJuntasFrontend.Controllers
 
         public async Task<ActionResult<List<AreaDTO>>> TodosAreas()
         {
-            HttpClient client = localServiceSSL.VotarSSL();
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+            HttpClient client = localServiceSSL.VotarSSL(token: tokenClaim.Value);
             var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/areas";
 
             try
@@ -69,8 +78,16 @@ namespace SalaJuntasFrontend.Controllers
         [HttpPost]
         public async Task<ActionResult<RespuestaAreaDTO>> CrearAreaAPI([FromBody] AreaCreacionDTO areaCreacionDTO)
         {
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+
             //Enviar al api la informacion
-            HttpClient client = localServiceSSL.VotarSSL();
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
             var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/areas";
             try
             {
@@ -116,8 +133,16 @@ namespace SalaJuntasFrontend.Controllers
         [HttpPut]
         public async Task<ActionResult<RespuestaAreaDTO>> EditarArea([FromRoute] int id, [FromBody] AreaCreacionDTO areaCreacionDTO)
         {
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+
             //Enviar al api la informacion
-            HttpClient client = localServiceSSL.VotarSSL();
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
             var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/areas/" + id;
             try
             {
@@ -160,7 +185,15 @@ namespace SalaJuntasFrontend.Controllers
         [HttpDelete]
         public async Task<ActionResult<RespuestaAreaDTO>> Delete(int id)
         {
-            HttpClient client = localServiceSSL.VotarSSL();
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
 
             string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
 

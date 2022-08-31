@@ -1,12 +1,15 @@
 ﻿using ApiSalaJuntas.Model.DTOS.Departamentos;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SalaJuntasFrontend.Servicios;
+using System.Net.Http.Headers;
 
 namespace SalaJuntasFrontend.Controllers
 {
+    
     public class DepartamentosController : Controller
     {
 
@@ -30,7 +33,16 @@ namespace SalaJuntasFrontend.Controllers
 
         public async Task<ActionResult<List<DepartamentoDTO>>> TodosDepartamentos()
         {
-            HttpClient client = localServiceSSL.VotarSSL();
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
+
             var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/departamento/obtener-todos";
             try
             {
@@ -63,8 +75,16 @@ namespace SalaJuntasFrontend.Controllers
         [HttpPost]
         public async Task<ActionResult<DepartamentoRespuestaDTO>> CrearUsuarioAPI([FromBody] DepartamentoCreacionDTO departamentoCreacionDTO)
         {
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+
             //Enviar al api la informacion
-            HttpClient client = localServiceSSL.VotarSSL();
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
             var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/departamento";
             try
             {
@@ -109,8 +129,16 @@ namespace SalaJuntasFrontend.Controllers
         [HttpPut]
         public async Task<ActionResult<DepartamentoRespuestaDTO>> Edit([FromRoute] int id, [FromBody] DepartamentoCreacionDTO departamentoCreacionDTO)
         {
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
+
+
             //Enviar al api la informacion
-            HttpClient client = localServiceSSL.VotarSSL();
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
             var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/departamento/" + id;
             try
             {
@@ -153,8 +181,14 @@ namespace SalaJuntasFrontend.Controllers
         [HttpDelete]
         public async Task<ActionResult<DepartamentoRespuestaDTO>> Delete(int id)
         {
+            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            if (tokenClaim == null)
+            {
+                ///Enviar mensaje de error
+                return Json("No se encuentra el TOKEN");
+            }
 
-            HttpClient client = localServiceSSL.VotarSSL();
+            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
 
             string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
 

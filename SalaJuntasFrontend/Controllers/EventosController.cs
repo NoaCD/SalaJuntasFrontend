@@ -37,6 +37,7 @@ namespace SalaJuntasFrontend.Controllers
         [HttpGet("obtener-eventos")]
         public async Task<ActionResult<List<EventoViewDTO>>> GetAll([FromQuery] DateTime start, DateTime end, int? idAreaMostrar = 1)
         {
+
             HttpClient client = localServiceSSL.VotarSSL();
 
             string domain = _configuration.GetValue<string>("ConnectionStrings:API");
@@ -70,98 +71,5 @@ namespace SalaJuntasFrontend.Controllers
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        // GET: EventosController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: EventosController/Create
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: EventosController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: EventosController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="collection"></param>
-        /// <returns></returns>
-        // POST: EventosController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        // GET: EventosController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="collection"></param>
-        /// <returns></returns>
-        // POST: EventosController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

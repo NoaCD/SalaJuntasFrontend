@@ -1,10 +1,20 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(Program));
-var app = builder.Build();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(option =>
+{
+    option.LoginPath = "/Login/Index";
+    option.ExpireTimeSpan = TimeSpan.FromHours(7);
+    option.AccessDeniedPath = "/Agenda/Index";
+
+});
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -17,11 +27,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Agenda}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();
