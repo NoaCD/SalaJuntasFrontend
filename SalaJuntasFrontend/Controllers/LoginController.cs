@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SalaJuntasFrontend.Models.DTOS.Login;
@@ -74,7 +73,6 @@ namespace SalaJuntasFrontend.Controllers
                     return View("Index");
                 }
 
-
             }
             return Index();
 
@@ -86,7 +84,7 @@ namespace SalaJuntasFrontend.Controllers
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return RedirectToAction("Agenda", "Login");
+            return RedirectToAction("Index", "Agenda");
         }
 
 

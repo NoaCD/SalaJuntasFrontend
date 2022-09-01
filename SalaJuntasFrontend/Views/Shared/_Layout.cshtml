@@ -7,6 +7,8 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/fullcalendar/main.min.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" />
+
     <link rel="stylesheet" href="/css/layout.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SalaJuntasFrontend.styles.css" asp-append-version="true" />
@@ -15,104 +17,170 @@
 </head>
 <body>
     <header>
-        @*        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 fondo-gris-primary">
+        @{
+            string UserName = "Invitado";
+        }
+
+        @if (User.IsInRole("supersu") || User.IsInRole("admin") || User.IsInRole("moderador") || User.IsInRole("cliente"))
+        {
+            UserName = User.Claims.Where(x => x.Type == "UserName").FirstOrDefault().Value;
+
+        }
+
+        <nav class="navbar fondo-gris-primary">
             <div class="container-fluid">
-            <div class="d-flex justify-content-center">
-            <img height="60px" width="60px" src="~/lib/images/solMayads.png"></img>
-            <a class="navbar-brand" asp-controller="Agenda" asp-action="Index"> <h3 class="color-text-primario" style="font-family:'Future Friends'">&nbsp;&nbsp;Tzolk'in</h3></a> <h1 class="color-text-primario text-banner"> "La cuenta de los días" </h1>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse" id="navbarTogglerDemo03">
-            <ul class="navbar-nav flex-grow-1">
-            <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </li>
-            </ul>
-            </div>
+                <div class="d-flex justify-content-center">
+                    <img height="60px" width="60px" src="~/lib/images/solMayads.png"></img>
+                </div>
+                <div class="d-flex justify-content-left">
+                    <a class="navbar-brand" asp-controller="Agenda" asp-action="Index"> <h3 class="color-text-primario" style="font-family:'Future Friends'">&nbsp;&nbsp;Tzolk'in</h3></a> <h1 class="color-text-primario text-banner"> "La cuenta de los días" </h1>
+                </div>
 
-            </div>
-            </div>
-
-            </nav>*@
-        <nav class="navbar navbar-expand-lg navbar-light fondo-gris-primary">
-            <div class="container-fluid">
-                <img height="60px" width="60px" src="~/lib/images/solMayads.png"></img>
-                <a class="navbar-brand" asp-controller="Agenda" asp-action="Index"> <h3 class="color-text-primario" style="font-family:'Future Friends'">&nbsp;&nbsp;Tzolk'in</h3></a> <h1 class="color-text-primario text-banner"> "La cuenta de los días" </h1>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler bg-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                    @UserName
+                    <i class="fa-solid fa-shuffle"></i>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" style="visibility : hidden" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" style="visibility : hidden" href="#">Link</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" style="visibility : hidden" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a style="visibility : hidden" class="dropdown-item" href="#">Action</a></li>
-                                <li><a style="visibility : hidden" class="dropdown-item" href="#">Another action</a></li>
-                                <li><hr style="visibility : hidden" class="dropdown-divider"></li>
-                                <li><a style="visibility : hidden" class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#" tabindex="-1" style="visibility : hidden" aria-disabled="true">Disabled</a>
-                        </li>
-                    </ul>
-                    <form class="d-flex">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h3 class="offcanvas-title" id="offcanvasNavbarLabel">¡Hola! @UserName <br /> Bienvenido </h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <form class="d-flex" role="search">
+                        </form>
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li class="nav-item">
-                                <a class="nav-link active text-light" asp-controller="Home" asp-action="Index">Inicio</a>
+                                <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Home">Inicio</a>
                             </li>
+
                             @if (User.IsInRole("supersu") || User.IsInRole("admin") || User.IsInRole("moderador"))
                             {
-
                                 <li class="nav-item">
-                                    <a class="nav-link text-light" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                                    <a class="nav-link" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-light" asp-controller="Departamentos" asp-action="Index">Departamentos</a>
+                                    <a class="nav-link" asp-controller="Departamentos" asp-action="Index">Departamentos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-light" asp-controller="Areas" asp-action="Index">Areas</a>
+                                    <a class="nav-link" asp-controller="Areas" asp-action="Index">Areas</a>
                                 </li>
                             }
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle bg-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    @{
-                                        string UserName = "Invitado";
-                                    }
 
-                                    @if (User.IsInRole("supersu") || User.IsInRole("admin") || User.IsInRole("moderador") || User.IsInRole("cliente"))
-                                    {
-                                        UserName = User.Claims.Where(x => x.Type == "UserName").FirstOrDefault().Value;
+                            @if (User.IsInRole("supersu") || User.IsInRole("admin") || User.IsInRole("moderador") || User.IsInRole("cliente"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        @UserName
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item dropdown">
+                                            <a class="dropdown-item">Mi perfil</a>
+                                        </li>
+                                        <li><a class="dropdown-item" asp-action="Salir" asp-controller="Login">Cerrar Sesion</a></li>
 
-                                    }
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Login">Iniciar Sesion</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Crear Cuenta</a>
+                                </li>
+                            }
 
-                                    @UserName
-
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Cerrar Sesion</a></li>
-                                </ul>
-                            </li>
                         </ul>
-                    </form>
+                    </div>
                 </div>
             </div>
         </nav>
+
+        @*        <nav class="navbar navbar-expand-lg navbar-light fondo-gris-primary">
+            <div class="container-fluid">
+            <img height="60px" width="60px" src="~/lib/images/solMayads.png"></img>
+            <a class="navbar-brand" asp-controller="Agenda" asp-action="Index"> <h3 class="color-text-primario" style="font-family:'Future Friends'">&nbsp;&nbsp;Tzolk'in</h3></a> <h1 class="color-text-primario text-banner"> "La cuenta de los días" </h1>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+            <a class="nav-link active" style="visibility : hidden" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" style="visibility : hidden" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" style="visibility : hidden" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a style="visibility : hidden" class="dropdown-item" href="#">Action</a></li>
+            <li><a style="visibility : hidden" class="dropdown-item" href="#">Another action</a></li>
+            <li><hr style="visibility : hidden" class="dropdown-divider"></li>
+            <li><a style="visibility : hidden" class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" style="visibility : hidden" aria-disabled="true">Disabled</a>
+            </li>
+            </ul>
+            <form class="d-flex">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+            <a class="nav-link active text-light" asp-controller="Home" asp-action="Index">Inicio</a>
+            </li>
+            @if (User.IsInRole("supersu") || User.IsInRole("admin") || User.IsInRole("moderador"))
+            {
+
+            <li class="nav-item">
+            <a class="nav-link text-light" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link text-light" asp-controller="Departamentos" asp-action="Index">Departamentos</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link text-light" asp-controller="Areas" asp-action="Index">Areas</a>
+            </li>
+            }
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle bg-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @{
+            string UserName = "Invitado";
+            }
+
+            @if (User.IsInRole("supersu") || User.IsInRole("admin") || User.IsInRole("moderador") || User.IsInRole("cliente"))
+            {
+            UserName = User.Claims.Where(x => x.Type == "UserName").FirstOrDefault().Value;
+
+            }
+
+            @UserName
+
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            @if (User.IsInRole("supersu") || User.IsInRole("admin") || User.IsInRole("moderador") || User.IsInRole("cliente"))
+            {
+            <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" asp-action="Salir" asp-controller="Login">Cerrar Sesion</a></li>
+            }
+            else
+            {
+            <li><a class="dropdown-item" href="#">Registrarse</a></li>
+            <li><a class="dropdown-item" href="#">Iniciar Sesion</a></li>
+
+            }
+            </ul>
+            </li>
+            </ul>
+            </form>
+            </div>
+            </div>
+            </nav>*@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -132,6 +200,8 @@
     <script src="~/lib/momentjs/moment.js"></script>
     <script src="~/lib/momentjs/lenguaje/es.js"></script>
     <script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/lib/fontawesome/js/all.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
