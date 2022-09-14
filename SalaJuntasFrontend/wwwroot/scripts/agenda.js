@@ -2,12 +2,15 @@
 /*
  * Las fecha internamente las maneja asi
  * "2022-06-17T09:00:00"
+ * 
  */
+var calendar = "";
+
 document.addEventListener('DOMContentLoaded', function () {
 
     var calendarEl = document.getElementById('agenda');
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
+     calendar = new FullCalendar.Calendar(calendarEl, {
         //Cabecera
         headerToolbar: {
             left: 'prev,next today',
@@ -44,8 +47,8 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         dateClick: function (info) {
             //Vamos a validar si existe el id del usuario para poder procesarlo
-            let userId = -1;
-            if (userId != -1) {
+            let authorize = $("#authorize").val();
+            if (authorize != false) {
                 if (info.allDay == true) {
                     $("#txtStart").val(info.dateStr);
                     MostraModal();
@@ -57,11 +60,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     //Los eventos programados terminaran en el mismo dia solo la hora cambiara
                     let fechaFinalNuevoEvento = (moment(info.dateStr).format("YYYY-MM-D"));
                     //Desahibilitamos los inputs para que no lo mueva el usuario
-                    $("#txtStart").val(fechaInicioNuevoEvento).prop('disable', true);
-                    $("#tHoraInicio").val(horaInicioNuevoEvento).prop('disabled', true);
+                    $("#txtStart").val(fechaInicioNuevoEvento);
+                    $("#tHoraInicio").val(horaInicioNuevoEvento);
                     MostraModal();
-
                 }
+
             } else {
                 mostrarAlertSwal('<i>¡Espera!</i>', '¡Porfavor inicia sesion para realizar tu evento!');
             }
@@ -177,11 +180,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     ///Controla el boton de agregar evento BOTON AGREGAR DEL MODAL
     $("#addEvent").click(function () {
-        let nuevoEvento = recolectarDatos("POST");
+        let nuevoEvento = recolectarDatos();
         let resultadoValidacion = validarEvento(nuevoEvento);
-
         if (resultadoValidacion) {
-            GuardarEvento(nuevoEvento);
+            EnviarEvento(nuevoEvento);
             CerrarModal();
         } else {
             mostrarAlertToast('Por favor completa todos los campos');
@@ -190,6 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
+    ///Funcion de prueba para guardar el evento localmente 
     function GuardarEvento(objEvento) {
         calendar.addEvent({
             title: objEvento.title,
@@ -217,5 +220,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
 });
 
+
+function EnviarEvento(evento) {
+
+    //Adaptar el event para el controlador
+
+    var eventoDTO =
+    {
+        "titulo": evento.title,
+        "descripcion": evento.description,
+        "color": evento.color,
+        "inicio": moment(evento.start).format("YYYY-MM-DD") + "T" + evento.startTime + ":00",
+        "final": moment(evento.end).format("YYYY-MM-DD") + "T" + evento.endTime + ":00",
+
+    };
+
+    let eventoJSON = JSON.stringify(eventoDTO);
+
+    //Enviar el evento
+    console.log(eventoJSON);
+    enviarControlador("POST", "/eventos/EnviarEvento", eventoJSON);
+
+
+}
+
+//Actualizacion asyncrona del calendario
+function ActualizarCalendario() {
+    calendar.refetchEvents();
+}

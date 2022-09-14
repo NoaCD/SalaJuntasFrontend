@@ -3,7 +3,7 @@
 * Metodo para armar un objeto de los datos del formulario
 * @param {any} method
 */
-function recolectarDatos(method) {
+function recolectarDatos() {
     nuevoEvento = {
         title: $("#txtTitle").val(),
         description: $("#txtDescription").val(),
@@ -12,7 +12,6 @@ function recolectarDatos(method) {
         end: $("#txtStart").val(),
         startTime: $("#tHoraInicio").val(),
         endTime: $("#tHoraFin").val(),
-        _method: method
     }
     return nuevoEvento;
 }
@@ -45,8 +44,6 @@ function validarEvento(objetoEvento) {
         return true;
     }
 
-
-
 }
 
 ///Funcion que muestra los datos 
@@ -69,9 +66,6 @@ function MostrarDetalleEvento() {
 function CerrarDetalleEvento() {
     $("#mostrarDetalleEvento").modal("hide");
 }
-
-
-
 
 function BorarDatosFormulario() {
     $("#txtTitle").val("");

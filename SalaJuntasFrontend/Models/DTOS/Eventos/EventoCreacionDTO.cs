@@ -8,9 +8,9 @@ namespace ApiSalaJuntas.Model.DTOS
 {
     public class EventoCreacionDTO
     {
-        public int idArea { get; set; }
-        public int idEstatus { get; set; }
-        public int idUsuario { get; set; }
+        public int? idArea { get; set; } = 1;
+        public int? idEstatus { get; set; } = 1;
+        public int? idUsuario { get; set; } = 0;
         public string titulo { get; set; }
         public string descripcion { get; set; }
         public string color { get; set; }
