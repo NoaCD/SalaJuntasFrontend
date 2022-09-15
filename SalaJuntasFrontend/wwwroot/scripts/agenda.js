@@ -5,12 +5,12 @@
  * 
  */
 var calendar = "";
-
 document.addEventListener('DOMContentLoaded', function () {
-
+    var areaId = $("#dropDownAreas").val() == null ? 1 : $("#dropDownAreas").val();
+    alert(areaId);
     var calendarEl = document.getElementById('agenda');
 
-     calendar = new FullCalendar.Calendar(calendarEl, {
+    calendar = new FullCalendar.Calendar(calendarEl, {
         //Cabecera
         headerToolbar: {
             left: 'prev,next today',
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 url: '/obtener-eventos/',
                 method: 'GET',
                 extraParams: {
-                    idAreaMostrar: 1,
+                    idAreaMostrar: areaId,
                 },
                 failure: function () {
                     mostrarAlertSwal("No hay conexion con el API", "Contacte con el desarrollador para solucionar este problema, gracias", "", "error");

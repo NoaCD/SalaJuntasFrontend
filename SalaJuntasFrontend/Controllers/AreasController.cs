@@ -27,17 +27,17 @@ namespace SalaJuntasFrontend.Controllers
         {
             return View();
         }
-
+        [AllowAnonymous]
         public async Task<ActionResult<List<AreaDTO>>> TodosAreas()
         {
-            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
-            if (tokenClaim == null)
-            {
-                ///Enviar mensaje de error
-                return Json("No se encuentra el TOKEN");
-            }
+            //var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
+            //if (tokenClaim == null)
+            //{
+            //    ///Enviar mensaje de error
+            //    return Json("No se encuentra el TOKEN");
+            //}
 
-            HttpClient client = localServiceSSL.VotarSSL(token: tokenClaim.Value);
+            HttpClient client = localServiceSSL.VotarSSL();
             var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/areas";
 
             try
