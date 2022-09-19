@@ -167,9 +167,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         idAreaMostrar: getAreaSeleccionada()
                     };
                 },
-                //extraParams: {
-                //    idAreaMostrar: getAreaSeleccionada(),
-                //},
                 failure: function () {
                     mostrarAlertSwal("No hay conexion con el API", "Contacte con el desarrollador para solucionar este problema, gracias", "", "error");
                     console.log(url);
@@ -196,35 +193,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-    ///Funcion de prueba para guardar el evento localmente 
-    function GuardarEvento(objEvento) {
-        calendar.addEvent({
-            title: objEvento.title,
-            start: objEvento.start,
-            end: objEvento.end,
-            backgroundColor: objEvento.color,
-            description: objEvento.description,
-            tStartTime: moment(objEvento.end).format("HH:mm:ss"),
-            tEndTime: moment(objEvento.start).format("HH:mm:ss"),
-
-
-        });
-        //calendar.addEvent({
-        //    title: objEvento.title,
-        //    start: objEvento.start + " " + objEvento.startTime,
-        //    end: objEvento.end + " " + objEvento.endTime,
-        //    backgroundColor: objEvento.color,
-        //    description: objEvento.description,
-        //    tStartTime: objEvento.startTime,
-        //    tEndTime: objEvento.endTime
-
-        //});
-        console.log(calendar.getEvents());
-
-    }
-
-
-
 });
 
 
@@ -240,6 +208,7 @@ function EnviarEvento(evento) {
 
     var eventoDTO =
     {
+        "idArea" : evento.idArea,
         "titulo": evento.title,
         "descripcion": evento.description,
         "color": evento.color,

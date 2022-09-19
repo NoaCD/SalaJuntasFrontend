@@ -12,6 +12,7 @@ function recolectarDatos() {
         end: $("#txtStart").val(),
         startTime: $("#tHoraInicio").val(),
         endTime: $("#tHoraFin").val(),
+        idArea: $("#dropDownAreas").val(),
     }
     return nuevoEvento;
 }
@@ -34,11 +35,11 @@ function validarEvento(objetoEvento) {
     //let endTime = objetoEvento.endTime;
 
     //Validamos el objeto que llega por parametro por desestructuracion de datos
-    let { title, description, start, end, startTime, endTime } = objetoEvento;
+    let { title, description, start, end, startTime, endTime, idArea } = objetoEvento;
 
 
     // start time and end time
-    if (title === "" || description === "" || start === "" || end === "" || startTime === "" || endTime === "") {
+    if (title === "" || description === "" || start === "" || end === "" || startTime === "" || endTime === "" || idArea === "") {
         return false;
     } else {
         return true;
