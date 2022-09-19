@@ -1,13 +1,21 @@
-﻿@*
+﻿@using SalaJuntasFrontend.Models.DTOS.ViewsModel
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     Layout = "/Views/Shared/_Layout.cshtml";
 }
+@model AreasViewModel
 
 <div class="container mt-4">
     @*DropDown de las diferentes areas que hay*@
-    <select id="dropDownAreas" class="form-select form-select-lg mb-3" ></select>
+    <select class="form-select form-select-lg mb-3" id="dropDownAreas" name="dropDowmAreas">
+        <option value="@Model.areas.FirstOrDefault(x=> x.id == 1).id" > @Model.areas.FirstOrDefault(x=>x.id == 1).nombre </option>       
+        @foreach(var item in Model.areas.Where(x => x.id != 1))
+        {
+            <option value="@item.id"> @item.nombre </option>
+        }
+    </select>
     <div id="agenda">
     </div>
 </div>

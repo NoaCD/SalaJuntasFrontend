@@ -6,8 +6,6 @@
  */
 var calendar = "";
 document.addEventListener('DOMContentLoaded', function () {
-    var areaId = $("#dropDownAreas").val() == null ? 1 : $("#dropDownAreas").val();
-    alert(areaId);
     var calendarEl = document.getElementById('agenda');
 
     calendar = new FullCalendar.Calendar(calendarEl, {
@@ -164,13 +162,19 @@ document.addEventListener('DOMContentLoaded', function () {
             {
                 url: '/obtener-eventos/',
                 method: 'GET',
-                extraParams: {
-                    idAreaMostrar: areaId,
+                extraParams: function () { // a function that returns an object
+                    return {
+                        idAreaMostrar: getAreaSeleccionada()
+                    };
                 },
+                //extraParams: {
+                //    idAreaMostrar: getAreaSeleccionada(),
+                //},
                 failure: function () {
                     mostrarAlertSwal("No hay conexion con el API", "Contacte con el desarrollador para solucionar este problema, gracias", "", "error");
                     console.log(url);
                 }
+
             }
         ]
 
@@ -224,6 +228,12 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+function getAreaSeleccionada() {
+    var idareas = $("#dropDownAreas").val();
+    return idareas
+};
+
+
 function EnviarEvento(evento) {
 
     //Adaptar el event para el controlador
@@ -248,6 +258,8 @@ function EnviarEvento(evento) {
 }
 
 //Actualizacion asyncrona del calendario
-function ActualizarCalendario() {
+function ActualizarCalendario() {  
     calendar.refetchEvents();
 }
+
+
