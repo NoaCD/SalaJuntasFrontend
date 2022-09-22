@@ -9,7 +9,6 @@ function enviarControlador(type, url, JSONDATA) {
             console.log(data);
             if (data.icono == "success") {
                 mostrarAlertSwal("Perfecto", data.mensaje, "", data.icono);
-                actualizarTablaAsyc();
                 cerrarModal();
             } else {
                 mostrarAlertSwal("Upps!", data.mensaje, "", data.icono);
@@ -70,10 +69,10 @@ function armarObjetoActualizacionUsuario() {
     let idEstatus = $("#idEstatus").val();
 
     let nuevoUsuario = {
-        "id":id,
+        "id": id,
         "idDepartamento": idDepartamento,
         "idCargo": idCargo,
-        "idTipoUsuario" : idTipoUsuario,
+        "idTipoUsuario": idTipoUsuario,
         "idEstatus": idEstatus,
         "primerNombre": primerNombre,
         "segundoNombre": segundoNombre,

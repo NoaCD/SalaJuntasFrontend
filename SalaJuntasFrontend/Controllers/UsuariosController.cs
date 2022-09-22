@@ -117,6 +117,7 @@ namespace SalaJuntasFrontend.Controllers
         }
 
         // GET: UsuariosController/Create
+        [AllowAnonymous]
         public ActionResult Create()
         {
             var UsuarioCrudViewnModel = GetDataCrudUser().Result;
@@ -130,17 +131,13 @@ namespace SalaJuntasFrontend.Controllers
         /// <param name="usuarioCreacion">DTO necesario para crear un usuario</param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
+
         public async Task<ActionResult<UsuarioRespuestaDTO>> CrearUsuarioApi([FromBody] UsuarioCreacionDTO usuarioCreacion)
         {
-            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
-            if (tokenClaim == null)
-            {
-                ///Enviar mensaje de error
-                return Json("No se encuentra el TOKEN");
-            }
 
             //Enviar al api la informacion
-            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
+            HttpClient client = localServiceSSL.VotarSSL();
             var url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/usuarios";
             try
             {
@@ -261,18 +258,13 @@ namespace SalaJuntasFrontend.Controllers
         /// 
         /// </summary>
         /// <returns>  </returns>
+        [AllowAnonymous]
         private async Task<ActionResult<UsuarioCRUDViewModel>> GetDataCrudUser()
         {
-            var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
-            if (tokenClaim == null)
-            {
-                ///Enviar mensaje de error
-                return Json("No se encuentra el TOKEN");
-            }
-
+          
             string baseAPI = _configuration.GetValue<string>("ConnectionStrings:API");
             //Hacemos una peticion para obtener todos los datos del usuario
-            HttpClient client = localServiceSSL.VotarSSL(tokenClaim.Value);
+            HttpClient client = localServiceSSL.VotarSSL();
             //URL GET Departamentos
             var url2 = baseAPI + "/api/departamento/obtener-todos";
             //URL TiposUsuarios

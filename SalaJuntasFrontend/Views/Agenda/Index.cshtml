@@ -10,8 +10,8 @@
 <div class="container mt-4">
     @*DropDown de las diferentes areas que hay*@
     <select class="form-select form-select-lg mb-3" id="dropDownAreas" name="dropDowmAreas">
-        <option value="@Model.areas.FirstOrDefault(x=> x.id == 1).id" > @Model.areas.FirstOrDefault(x=>x.id == 1).nombre </option>       
-        @foreach(var item in Model.areas.Where(x => x.id != 1))
+        <option value="@Model.areas.FirstOrDefault(x=> x.id == 1).id"> @Model.areas.FirstOrDefault(x=>x.id == 1).nombre </option>
+        @foreach (var item in Model.areas.Where(x => x.id != 1))
         {
             <option value="@item.id"> @item.nombre </option>
         }
@@ -35,13 +35,14 @@
                     <label for="txtTitle"> Titulo </label>
                     <input type="text" class="form-control" id="txtTitle" placeholder="Escribe un título para tu evento">
                 </div>
+                <input type="hidden" id="idEvento"  />
                 <div class="form-group">
                     <label for="txtDescription">Descripción </label>
                     <textarea class="form-control" id="txtDescription" rows="3" placeholder="Describé lo que harás'"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="txtStart">Fecha </label>
-                    <input disabled type="text" class="form-control" id="txtStart" placeholder="">
+                    <input disabled type="date" class="form-control" id="txtStart" placeholder="">
                 </div>
                 <div class="form-group">
                     <label for="tHoraInicio">Hora Inicio </label>
@@ -57,12 +58,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                <button type="button" class="btn btn-success" id="btnUpdateEvent">Actualizar</button>
                 <button type="button" class="btn btn-primary" id="addEvent">Agregar</button>
-                <button type="button" class="btn btn-warning">Modificar</button>
-                <button type="button" class="btn btn-danger">Eliminar</button>
-
-
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -79,10 +78,11 @@
             </div>
             <div class="modal-body">
                 <div class="card shadow">
-                    <h6 class="float-end"><span id="txtShowDateProgramated" class="badge bg-primary"></span></h6>
+                    <h6 class="float-end"><span id="txtShowDateProgramated" class="badge"></span></h6>
                     <div class="card-body text-center">
                         <h5 class="card-title" id="txtShowTitle">Event Title</h5>
                         <h6 class="card-subtitle mb-2 text-muted" id="txtShowSubtitle"> DepartamentName </h6>
+                        <input type="hidden" id="idEvento" />
                         <hr />
                         <p class="card-text" id="txtShowDescription">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <p class="card-text"><small id="txtShowDuration" class="text-muted"></small></p>
@@ -92,9 +92,9 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnDeleteCard">Eliminar</button>
+                <button type="button" class="btn btn-warning" id="btnModifyCard">Modificar</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-warning">Modificar</button>
-                <button type="button" class="btn btn-danger">Eliminar</button>
             </div>
         </div>
     </div>

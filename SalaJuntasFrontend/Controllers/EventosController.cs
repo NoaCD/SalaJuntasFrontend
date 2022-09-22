@@ -78,10 +78,10 @@ namespace SalaJuntasFrontend.Controllers
         /// <param name="eventoCreacionDTO"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<RespuestaEventoDTO>> EnviarEvento([FromBody]EventoCreacionDTO eventoCreacionDTO)
+        public async Task<ActionResult<RespuestaEventoDTO>> EnviarEvento([FromBody] EventoCreacionDTO eventoCreacionDTO)
         {
             string token = "non";
-                token = User.Claims.Where(x => x.Type == "Token").FirstOrDefault().Value;
+            token = User.Claims.Where(x => x.Type == "Token").FirstOrDefault().Value;
 
             string url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/eventos";
 
@@ -109,5 +109,78 @@ namespace SalaJuntasFrontend.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        public async Task<ActionResult<RespuestaEventoDTO>> ActualizarEvento(int idEvento, [FromBody] EventoCreacionDTO eventoCreacionDTO)
+        {
+            string token = "non";
+            token = User.Claims.Where(x => x.Type == "Token").FirstOrDefault().Value;
+
+            string url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/eventos/" + idEvento;
+
+            if (token == null || token == "non")
+            {
+                return BadRequest("No se encuentra el token");
+            }
+
+            HttpClient client = localServiceSSL.VotarSSL(token);
+            var jsonEvent = JsonConvert.SerializeObject(eventoCreacionDTO);
+
+            var content = new StringContent(jsonEvent, System.Text.Encoding.UTF8, "application/json");
+            var peticion = await client.PutAsync(url, content);
+            try
+            {
+
+                var jsonRespuesta = await peticion.Content.ReadAsStringAsync();
+                var oRespuesta = JsonConvert.DeserializeObject<RespuestaEventoDTO>(jsonRespuesta);
+                return oRespuesta;
+
+            }
+            catch (HttpRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Metodo para eliminar un evento para ello necesitamoso el id del evento
+        /// </summary>
+        /// <param name="idEvento"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<ActionResult<RespuestaEventoDTO>> eliminarEvento(int idEvento)
+        {
+            string token = "non";
+            token = User.Claims.Where(x => x.Type == "Token").FirstOrDefault().Value;
+
+            string url = _configuration.GetValue<string>("ConnectionStrings:API") + "/api/eventos/" + idEvento;
+
+            if (token == null || token == "non")
+            {
+                return BadRequest("No se encuentra el token");
+            }
+
+            HttpClient client = localServiceSSL.VotarSSL(token);
+            var response = await client.DeleteAsync(url);
+            var r = await response.Content.ReadAsStringAsync();
+            if (r != null && r !="")
+            {
+                RespuestaEventoDTO oUserResponse = JsonConvert.DeserializeObject<RespuestaEventoDTO>(r);
+                return oUserResponse;
+            }
+            else
+            {
+                return
+                new RespuestaEventoDTO()
+                {
+                    icono = "error",
+                    codigoEstatus = 404,
+                    mensaje = "Fallamos en al conectarnos con el api"
+                };
+            }
+
+
+        }
+
     }
 }

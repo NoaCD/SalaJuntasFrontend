@@ -30,11 +30,12 @@
         }
 
         <input type="hidden" id="authorize" value="@token" />
+        <input type="hidden" id="userName" value="@UserName" />
 
         <nav class="navbar fondo-gris-primary">
             <div class="container-fluid">
                 <div class="d-flex justify-content-center">
-                    <img height="60px" width="60px" src="~/lib/images/solMayads.png"></img>
+                    <img height="60px"  src="~/lib/images/logosGiotex/whiteFullLogo.png"></img>
                 </div>
                 <div class="d-flex justify-content-left">
                     <a class="navbar-brand" asp-controller="Agenda" asp-action="Index"> <h3 class="color-text-primario" style="font-family:'Future Friends'">&nbsp;&nbsp;Tzolk'in</h3></a> <h1 class="color-text-primario text-banner"> "La cuenta de los días" </h1>
@@ -89,7 +90,7 @@
                                     <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Login">Iniciar Sesion</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Crear Cuenta</a>
+                                    <a class="nav-link" asp-action="Index" asp-controller="Login"  >Crear Cuenta</a>
                                 </li>
                             }
 

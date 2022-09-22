@@ -15,8 +15,9 @@ function enviarControlador(type, url, JSONDATA) {
             if (data.icono == "success") {
                 ActualizarCalendario();
                 mostrarAlertSwal("Perfecto", data.mensaje, "", data.icono);
+                CerrarModal();
             } else {
-                mostrarAlertSwal(data.icono, data.mensaje, "", data.icono);
+                mostrarAlertSwal("Upps!", data.mensaje, "", data.icono);
             }
         },
         error: function (err) {

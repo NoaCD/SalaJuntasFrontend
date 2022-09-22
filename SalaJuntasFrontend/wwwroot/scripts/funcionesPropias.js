@@ -72,6 +72,9 @@ function BorarDatosFormulario() {
     $("#txtTitle").val("");
     $("#txtDescription").val("");
     $("#tHoraFin").val("");
+    $("#btnUpdateEvent").css('visibility', 'hidden');
+    $("#addEvent").css('visibility', 'visible').prop('disabled', false);
+
 }
 
 
@@ -115,4 +118,28 @@ function obtenerDuracionEvento(dateTimeInicio, dateTimeFinal = "") {
         stringDuration = "No hay hora final valida, por lo que no se puede calcular la duracion"
     }
     return stringDuration;
+}
+
+
+function ocultarBotonModifyCard() {
+    $("#btnModifyCard").css('visibility', 'hidden');
+    $("#btnDeleteCard").css('visibility', 'hidden');
+}
+
+function mostrarBotonModifyCard() {
+    $("#btnModifyCard").css('visibility', 'visible');
+    $("#btnDeleteCard").css('visibility', 'visible');
+}
+
+/**
+ * 
+ * @param {any} userNameShort
+ * userName debe ser la union de primer nombre y primer apellido
+ */
+function esDueñoDelEvento(userNameOfEvent = "") {
+    let esDueño = false
+    if ($("#userName").val() == userNameOfEvent) {
+        esDueño = true
+    }
+    return esDueño;
 }

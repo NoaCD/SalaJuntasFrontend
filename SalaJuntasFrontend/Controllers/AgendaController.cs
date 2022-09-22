@@ -20,14 +20,10 @@ namespace SalaJuntasFrontend.Controllers
         public IActionResult Index()
         {
             AreasController areasController = new AreasController(mapper, configuration);
-
-
             //Realizamos una peticion para obtener todas las salas
             var todasSalas = (dynamic)areasController.TodosAreas().Result.Result;
 
             List<AreaDTO> jsonSalas = todasSalas.Value.Data;
-
-
 
             var areasViewModel = new AreasViewModel();
 

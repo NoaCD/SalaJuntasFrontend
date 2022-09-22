@@ -10,8 +10,6 @@ function format(d) {
     let fechaCreacion = moment(d.fechaCreacion).format('LLLL');
     let tipoUsuario = d.tipoUsuario.nombre;
     let edadEnAnios = moment().diff(d.fechaNacimiento, 'years');
-    let edadEnDias = moment().diff(d.fechaNacimiento, 'days');
-    let añosEnMarte = (edadEnDias / 687); //687 dias año astral en marte
     let edad = edadEnAnios + " años";
     // `d` is the original data object for the row
     return (
@@ -25,7 +23,7 @@ function format(d) {
         '<tr>' +
         '<td>Fecha Nacimiento:</td>' +
         '<td>' +
-        `<span class="badge bg-primary">${fechaNacimiento}</span> <span class="badge bg-success"> Edad - ${edad}</span> <span class="badge bg-dark"> Edad en Marte - ${Math.trunc(añosEnMarte)} años :)</span>` +
+        `<span class="badge bg-primary">${fechaNacimiento}</span> <span class="badge bg-success"> Edad - ${edad}</span>` +
         '</td>' +
         '</tr>' +
         '<tr>' +
