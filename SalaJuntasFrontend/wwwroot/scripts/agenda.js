@@ -43,10 +43,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     //alert(moment(calEvent.start).format('h:mm:ss a'));
                     //Tenemos los datos de la fecha seleccionada lo formateamos para nuestro uso
-                    let fechaInicioNuevoEvento = (moment(info.dateStr).format("YYYY-MM-D"));
+                    let fechaInicioNuevoEvento = (moment(info.dateStr).format("YYYY-MM-DD"));
                     let horaInicioNuevoEvento = (moment(info.dateStr).format("HH:mm"));
                     //Los eventos programados terminaran en el mismo dia solo la hora cambiara
-                    let fechaFinalNuevoEvento = (moment(info.dateStr).format("YYYY-MM-D"));
                     //Desahibilitamos los inputs para que no lo mueva el usuario
                     $("#txtStart").val(fechaInicioNuevoEvento);
                     $("#tHoraInicio").val(horaInicioNuevoEvento);
@@ -131,9 +130,16 @@ document.addEventListener('DOMContentLoaded', function () {
     $("#addEvent").click(function () {
         let nuevoEvento = recolectarDatos();
         let resultadoValidacion = validarEvento(nuevoEvento);
+        //¿Tiene logica las que el usuario ingresa?
         if (resultadoValidacion) {
-            EnviarEvento(nuevoEvento);
-            CerrarModal();
+            let logicaHoras = verificarLogicaFechas(nuevoEvento.startTime, nuevoEvento.endTime);
+            if (logicaHoras == false) {
+                mostrarAlertToast('La hora de inicio no puede ser mayor que la hora fin', 'question');
+            } else {
+                EnviarEvento(nuevoEvento);
+                CerrarModal();
+            }
+
         } else {
             mostrarAlertToast('Por favor completa todos los campos');
         }
@@ -241,7 +247,6 @@ $("#btnUpdateEvent").click(function () {
  * */
 function rellenarFormularioModificacion(oEvento = {}) {
 
-    console.info(JSON.stringify(oEvento));
     let { title, start, id, backgroundColor, extendedProps: { description: description, tStartTime: tStartTime, tEndTime: tEndTime } } = oEvento;
     let fechaInicio = moment(start).format("YYYY-MM-DD");
 

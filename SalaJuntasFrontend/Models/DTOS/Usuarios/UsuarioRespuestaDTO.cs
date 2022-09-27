@@ -10,5 +10,7 @@ namespace ApiSalaJuntas.Model.DTOS.Usuarios
     public class UsuarioRespuestaDTO : RespuestaDTO
     {
         public UsuarioDTO? usuario { get; set; } = null;
+        public string[] errores { get; set; }
+
     }
 }

@@ -37,7 +37,6 @@ function validarEvento(objetoEvento) {
     //Validamos el objeto que llega por parametro por desestructuracion de datos
     let { title, description, start, end, startTime, endTime, idArea } = objetoEvento;
 
-
     // start time and end time
     if (title === "" || description === "" || start === "" || end === "" || startTime === "" || endTime === "" || idArea === "") {
         return false;
@@ -46,6 +45,28 @@ function validarEvento(objetoEvento) {
     }
 
 }
+
+
+/**
+ * Este metodo comprubea que la hora de inicio siempre sea menor que la hora fin
+ * No se debe crear un evento
+ * @param {any} horaInicio
+ * @param {any} horaFin
+ */
+function verificarLogicaFechas(horaInicio, horaFin) {
+
+    let startTime = moment(horaInicio,'HH:mm');
+    let endTime = moment(horaFin,'HH:mm')
+
+    let esValido = false;
+    if (startTime > endTime)
+        esValido = false;
+    else
+        esValido = true;
+
+    return esValido;
+}
+
 
 ///Funcion que muestra los datos 
 function MostraModal() {

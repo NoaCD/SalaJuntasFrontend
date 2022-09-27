@@ -10,20 +10,31 @@
 <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" />
 }
 <div><br /></div>
-<div class="container">
-    <div class="container-fluid">
+<div class="container ">
+    <div class="container-fluid justify-content-end">
+
         <h1 class="text-center display-6">Todos los usuarios</h1>
         <hr />
         <partial name="_TablaUsuarios.cshtml" />
     </div>
+    <div class="justify-content-center text-center">
+        <button disabled type="button" class="btn btn-primary"> <i class="fa-solid fa-check"></i> </button>
+        Pendiente por aceptar
+        <button disabled type="button" class="btn btn-dark"> <i class="fa-solid fa-lock"></i></button>
+        Bloqueado, uso restringido
+        <button disabled type="button" class="btn btn-success"> <i class="fa-solid fa-unlock"></i></button>
+        Debloquear usuario
+    </div>
+
 </div>
+
 
 @section Scripts{
 <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script type="text/javascript" src="~/lib/datatable/datatables.min.js"></script>
 <script type="text/javascript" src="~/lib/fontawesome/js/all.min.js"></script>
-<script type="text/javascript" src="~/scripts/helpers/EnviarControlador.js"  ></script>
-<script type="text/javascript" src="~/scripts/alerts.js"  ></script>
+<script type="text/javascript" src="~/scripts/helpers/EnviarControlador.js"></script>
+<script type="text/javascript" src="~/scripts/alerts.js"></script>
 <script type="text/javascript" src="~/scripts/crud/usuarioRest.js"></script>
 <script type="text/javascript" src="~/scripts/crud/usuarios.js"></script>
 }

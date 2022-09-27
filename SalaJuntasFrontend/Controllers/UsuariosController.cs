@@ -80,6 +80,8 @@ namespace SalaJuntasFrontend.Controllers
         /// 
         /// </summary>
         /// <returns> Lista Usuarios DTO </returns>
+        /// 
+        [Authorize(Roles = "admin,supersu,moderador")]
         public async Task<ActionResult<List<UsuarioDTO>>> TodosUsuarios()
         {
             var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
@@ -181,6 +183,7 @@ namespace SalaJuntasFrontend.Controllers
         /// </summary>
         /// <param name="id">Id del usuario</param>
         /// <returns></returns>
+        [Authorize(Roles = "admin,supersu")]
         public async Task<ActionResult> Edit(int id)
         {
             var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
@@ -342,6 +345,7 @@ namespace SalaJuntasFrontend.Controllers
         /// <param name="claveEstatus"></param>
         /// <returns></returns>
         [HttpPut]
+        [Authorize(Roles = "admin,supersu,moderador")]
         public async Task<ActionResult<UsuarioRespuestaDTO>> cambiarEstatus([FromQuery] int idUsuario, string claveEstatus)
         {
             var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
@@ -423,6 +427,7 @@ namespace SalaJuntasFrontend.Controllers
         /// </summary>
         /// <param name="usuarioEdicionDTO">DTO NECESARIO PARA REALIZAR LA EDICION</param>
         /// <returns></returns>
+        [Authorize(Roles = "admin,supersu,moderador")]
         public async Task<ActionResult<UsuarioRespuestaDTO>> guardarActualizacionUsuario(int id, [FromBody] UsuarioEdicionDTO usuarioEdicionDTO)
         {
             var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
@@ -463,6 +468,7 @@ namespace SalaJuntasFrontend.Controllers
         /// </summary>
         /// <param name="cambiarContraseniaDTO"></param>
         /// <returns>UsuarioRespuestaDTO</returns>
+        [Authorize(Roles = "admin,supersu")]
         public async Task<ActionResult<UsuarioRespuestaDTO>> cambiarContrasenia([FromBody] CambiarContraseniaDTO cambiarContraseniaDTO)
         {
             var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();
@@ -520,7 +526,7 @@ namespace SalaJuntasFrontend.Controllers
         /// </summary>
         /// <param name="id">id del usuario a eliminar</param>
         /// <returns></returns>
-
+        [Authorize(Roles = "admin,supersu")]
         public async Task<ActionResult<UsuarioRespuestaDTO>> Delete(int id)
         {
             var tokenClaim = HttpContext.User.Claims.Where(x => x.Type == "Token").FirstOrDefault();

@@ -247,8 +247,8 @@ function cambiarContrasenia(idUsuario, nombre) {
                     } else if (password != passwordConfirm) {
                         Swal.showValidationMessage(`La contraseña no coincide, porfavor verifique`)
                     }
-                    if (password.length <= 4 && passwordConfirm.length <= 4) {
-                        Swal.showValidationMessage(`La contraseña debe tener mas de 4 digitos`)
+                    if (password.length <= 8 && passwordConfirm.length <= 8) {
+                        Swal.showValidationMessage(`La contraseña debe tener mas de 8 digitos`)
 
                     }
 

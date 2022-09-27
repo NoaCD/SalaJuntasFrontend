@@ -13,6 +13,8 @@ function enviarControlador(type, url, JSONDATA) {
                 cerrarModal();
             } else {
                 mostrarAlertSwal("Upps!", data.mensaje, "", data.icono);
+                console.info("Desde el controlador");
+                console.info(data);
             }
         },
         error: function (err) {
@@ -70,10 +72,10 @@ function armarObjetoActualizacionUsuario() {
     let idEstatus = $("#idEstatus").val();
 
     let nuevoUsuario = {
-        "id":id,
+        "id": id,
         "idDepartamento": idDepartamento,
         "idCargo": idCargo,
-        "idTipoUsuario" : idTipoUsuario,
+        "idTipoUsuario": idTipoUsuario,
         "idEstatus": idEstatus,
         "primerNombre": primerNombre,
         "segundoNombre": segundoNombre,
