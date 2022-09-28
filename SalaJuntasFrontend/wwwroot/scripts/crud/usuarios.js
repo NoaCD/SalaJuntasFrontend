@@ -86,11 +86,10 @@ $(document).ready(function () {
             'pdf', 'excel',
             {
                 text: '<i class="fa-solid fa-user-plus"></i>',
-                action: () => $.get('/usuarios/create').done(function (response) {
-                    console.log(response);
-                    $('#modal').html(response);
-                    abrirModal();
-                }).fail((error) => alert(`Tiempo agotado el servidor no responde: ${error}`))
+                action: async () => {
+                    const modal = crearNuevoUsuario();
+
+                }
             },
             {
 
@@ -293,4 +292,12 @@ function validarEmail(valor) {
     } else {
         return false;
     }
+}
+function crearNuevoUsuario() {
+    $.get('/usuarios/create').done(function (response) {
+        //Hacer asincrona esta funcion
+        console.log(response);
+        $('#modal').html(response);
+        abrirModal();
+    }).fail((error) => alert(`Tiempo agotado el servidor no responde: ${error}`))
 }

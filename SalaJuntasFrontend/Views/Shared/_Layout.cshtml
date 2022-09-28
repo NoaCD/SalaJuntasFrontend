@@ -17,6 +17,7 @@
 <body>
     <header>
         @{
+            var actualYear = DateTime.Now.ToString("yyyy");
             string UserName = "Invitado";
             bool token = false;
             string role = "";
@@ -81,7 +82,7 @@
                                         @UserName
                                     </a>
                                     <ul class="dropdown-menu">
-                                      
+
                                         <li><a class="dropdown-item" asp-action="Salir" asp-controller="Login">Cerrar Sesion</a></li>
                                     </ul>
                                 </li>
@@ -209,7 +210,7 @@
             </div>
             </nav>*@
     </header>
-    <div class="container gradient-custom-2" >
+    <div class="container gradient-custom-2">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -217,7 +218,8 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - Tzolk'in' - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            ©@actualYear Giotex S.A o sus afiliados
+           <a asp-area="" asp-controller="Agenda" asp-action="Index"> Tzolk'in'</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

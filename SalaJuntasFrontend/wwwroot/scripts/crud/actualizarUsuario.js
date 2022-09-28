@@ -40,10 +40,10 @@ function validarFormulario() {
             },
             "apellidoPaterno": {
                 required: true,
-                minlength: 3
+                minlength: 2
             },
             "apellidoMaterno": {
-                minlength: 3
+                minlength: 2
             },
             "fechaNacimiento": {
                 required: true,
@@ -66,10 +66,10 @@ function validarFormulario() {
             },
             "apellidoPaterno": {
                 required: "Este campo es requerido",
-                minlength: "Minimo 3 letras"
+                minlength: "Minimo 2 letras"
             },
             "apellidoMaterno": {
-                minlength: "Minimo 3 letras"
+                minlength: "Minimo 2 letras"
             },
             "fechaNacimiento": {
                 required: "Este campo es requerido",

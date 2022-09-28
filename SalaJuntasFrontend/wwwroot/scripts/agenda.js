@@ -204,7 +204,6 @@ $("#btnModifyCard").click(function () {
         $("#btnUpdateEvent").css('visibility', 'visible').focus().css('background-color', '#5b418b');
 
 
-
     }
 });
 
@@ -224,20 +223,28 @@ $("#btnUpdateEvent").click(function () {
     let esValido = validarEvento(oEvento);
     if (!esValido) {
         mostrarAlertToast('¡Por favor complete todos los campos!');
+    } else {
+        let logicaHoras = verificarLogicaFechas(oEvento.startTime, oEvento.endTime);
+        if (logicaHoras == false) {
+            mostrarAlertToast('La hora de inicio no puede ser mayor que la hora fin', 'question');
+        } else {
+
+            //Adaptar el event para el controlador
+            var eventoDTO =
+            {
+                "idArea": oEvento.idArea,
+                "titulo": oEvento.title,
+                "descripcion": oEvento.description,
+                "color": oEvento.color,
+                "inicio": moment(oEvento.start).format("YYYY-MM-DD") + "T" + oEvento.startTime,
+                "final": moment(oEvento.end).format("YYYY-MM-DD") + "T" + oEvento.endTime,
+            };
+
+            enviarControlador('PUT', '/eventos/ActualizarEvento?idEvento=' + idEvento, JSON.stringify(eventoDTO));
+        }
     }
 
-    //Adaptar el event para el controlador
-    var eventoDTO =
-    {
-        "idArea": oEvento.idArea,
-        "titulo": oEvento.title,
-        "descripcion": oEvento.description,
-        "color": oEvento.color,
-        "inicio": moment(oEvento.start).format("YYYY-MM-DD") + "T" + oEvento.startTime,
-        "final": moment(oEvento.end).format("YYYY-MM-DD") + "T" + oEvento.endTime,
-    };
 
-    enviarControlador('PUT', '/eventos/ActualizarEvento?idEvento=' + idEvento, JSON.stringify(eventoDTO));
 
 });
 

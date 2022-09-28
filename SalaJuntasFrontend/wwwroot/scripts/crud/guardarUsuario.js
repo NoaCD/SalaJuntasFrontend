@@ -39,10 +39,10 @@ function validarFormulario() {
             },
             "apellidoPaterno": {
                 required: true,
-                minlength: 3
+                minlength: 2
             },
             "apellidoMaterno": {
-                minlength: 3
+                minlength: 2
             },
             "fechaNacimiento": {
                 required: true,
@@ -59,7 +59,7 @@ function validarFormulario() {
             },
             "password": {
                 required: true,
-                minlength: 4
+                minlength: 8
             }
         },
         messages: {
@@ -72,10 +72,10 @@ function validarFormulario() {
             },
             "apellidoPaterno": {
                 required: "Este campo es requerido",
-                minlength: "Minimo 3 letras"
+                minlength: "Minimo 2 letras"
             },
             "apellidoMaterno": {
-                minlength: "Minimo 3 letras"
+                minlength: "Minimo 2 letras"
             },
             "fechaNacimiento": {
                 required: "Este campo es requerido",
@@ -92,7 +92,7 @@ function validarFormulario() {
             },
             "password": {
                 required: "La contraseña es obligatoria",
-                minlength: "Minimo 4 caracteres"
+                minlength: "Minimo 8 caracteres"
             }
 
         }
