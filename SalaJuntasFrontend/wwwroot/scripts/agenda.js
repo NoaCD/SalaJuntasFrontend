@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 moment(info.event.extendedProps.tStartTime, "HH:mm").format("HH:mm") + " <b>A</b> " +
                 moment(info.event.extendedProps.tEndTime, "HH:mm").format("HH:mm") +
                 "<br><b>Duracion:</b> " + stringDuration + "<br>"
-                + `Creado el: ${moment(fechaCreacion).format("D")} de ${moment(fechaCreacion).format("MMMM yy")} • <b>${userNameShort}</b>`
+                + `Creado el: ${moment(fechaCreacion).format("D")} de ${moment(fechaCreacion).format("MMMM yy")} ${moment(fechaCreacion).format("HH:mm")} • <b>${userNameShort}</b>`
 
             );
             /***
