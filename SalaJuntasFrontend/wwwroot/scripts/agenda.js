@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
             center: 'title',
             right: 'timeGridDay,dayGridMonth,timeGridWeek,listWeek'
         },
+        //Indicador de tiempo
+        nowIndicator: true,
         //Idioma
         locale: 'es',
         //TimeZone o Hora de la zona
